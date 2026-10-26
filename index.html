@@ -1,0 +1,3056 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ekspedisi Pulau Akar — Gim Edukasi Teorema Faktor & Polinomial</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Konfigurasi MathJax -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      svg: { fontCache: 'global' },
+      startup: { typeset: false }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --bg-deep: #07191e;
+      --bg-mid: #0d2b33;
+      --bg-card: rgba(16, 48, 57, 0.86);
+      --bg-glass: rgba(255, 255, 255, 0.08);
+      --border-glass: rgba(255, 255, 255, 0.18);
+      --gold: #fbbf24;
+      --gold-hover: #f59e0b;
+      --emerald: #10b981;
+      --emerald-dark: #059669;
+      --cyan: #38bdf8;
+      --coral: #fb7185;
+      --purple: #c084fc;
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --shadow-glow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 185, 129, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--text-main);
+      background: radial-gradient(circle at 20% 20%, #134e4a 0%, #07191e 55%, #040d10 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .font-display {
+      font-family: 'Fredoka', sans-serif;
+      letter-spacing: 0.3px;
+    }
+
+    /* Bar Navigasi Atas */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px;
+      background: rgba(7, 25, 30, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-glass);
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 1.1rem;
+    }
+
+    .hud-stats {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hud-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .sync-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--emerald);
+      display: inline-block;
+    }
+    .sync-dot.pending { background: var(--gold); animation: pulse 1.4s infinite; }
+    .sync-dot.local { background: var(--cyan); }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.3); opacity: 0.6; }
+    }
+
+    /* Kontainer Utama */
+    .app-container {
+      width: 100%;
+      max-width: 1024px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+      flex: 1;
+    }
+
+    .screen {
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Kartu Glassmorphism */
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      box-shadow: var(--shadow-glow);
+      margin-bottom: 20px;
+    }
+
+    /* Tombol Interaktif (Target Sentuh >= 44px) */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 10px 20px;
+      border-radius: var(--radius-md);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: var(--text-main);
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+    .btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--emerald), var(--emerald-dark));
+      border-color: rgba(255,255,255,0.25);
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), var(--gold-hover));
+      color: #07191e;
+      border-color: #fde68a;
+      box-shadow: 0 4px 15px rgba(251, 191, 36, 0.35);
+    }
+
+    .btn-cyan {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      border-color: var(--cyan);
+    }
+
+    .btn-sm {
+      min-height: 44px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+    }
+
+    /* Form & Input */
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border-glass);
+      background: rgba(7, 25, 30, 0.85);
+      color: var(--text-main);
+      font-size: 1rem;
+      font-family: inherit;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.25);
+    }
+
+    /* Grid Karakter */
+    .char-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .char-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.22s ease;
+    }
+    .char-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-3px);
+    }
+    .char-card.selected {
+      border-color: var(--gold);
+      background: rgba(251, 191, 36, 0.14);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+    }
+    .char-avatar {
+      font-size: 3.2rem;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    /* Peta Dunia */
+    .map-wrapper {
+      position: relative;
+      background: linear-gradient(180deg, #0b3b49 0%, #092e26 55%, #07191e 100%);
+      border-radius: var(--radius-lg);
+      border: 2px solid rgba(251, 191, 36, 0.35);
+      padding: 24px 18px;
+      overflow: hidden;
+    }
+
+    .zone-path-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 18px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .zone-node {
+      background: rgba(10, 34, 41, 0.92);
+      border: 2px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .zone-node.unlocked {
+      border-color: var(--emerald);
+      cursor: pointer;
+    }
+    .zone-node.unlocked:hover {
+      transform: translateY(-4px);
+      border-color: var(--gold);
+      box-shadow: 0 8px 25px rgba(251, 191, 36, 0.22);
+    }
+    .zone-node.locked {
+      opacity: 0.6;
+      filter: grayscale(0.45);
+    }
+    .zone-badge-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 12px;
+      border-radius: 99px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--emerald);
+    }
+
+    /* Stepper Sintaks Discovery Learning */
+    .discovery-stepper {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 18px;
+    }
+    .step-pill {
+      flex: 1;
+      min-width: 115px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-glass);
+      font-size: 0.82rem;
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+    .step-pill.active {
+      background: rgba(251, 191, 36, 0.2);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+    .step-pill.done {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--emerald);
+      color: #6ee7b7;
+    }
+
+    /* Tabel Skema Horner Interaktif */
+    .horner-box {
+      background: rgba(4, 15, 19, 0.85);
+      border: 1px solid var(--cyan);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      overflow-x: auto;
+      margin: 14px 0;
+    }
+    .horner-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 360px;
+      text-align: center;
+      font-size: 1.05rem;
+    }
+    .horner-table td, .horner-table th {
+      padding: 10px 12px;
+    }
+    .horner-k-cell {
+      border-right: 3px solid var(--gold);
+      font-weight: 700;
+      color: var(--gold);
+      font-size: 1.2rem;
+    }
+    .horner-bottom-row td {
+      border-top: 2px solid var(--text-main);
+      font-weight: 700;
+    }
+    .horner-rem-cell {
+      background: rgba(251, 191, 36, 0.2);
+      border: 2px dashed var(--gold);
+      border-radius: 8px;
+      color: var(--gold);
+    }
+    .horner-cell-anim {
+      transition: all 0.3s ease;
+      transform: scale(1);
+    }
+    .horner-cell-anim.highlight {
+      background: rgba(56, 189, 248, 0.28);
+      transform: scale(1.08);
+      border-radius: 8px;
+    }
+
+    /* Pilihan Ganda & Opsi */
+    .options-list {
+      display: grid;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .option-btn {
+      width: 100%;
+      min-height: 52px;
+      text-align: left;
+      padding: 14px 18px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid var(--border-glass);
+      color: var(--text-main);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+    }
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--cyan);
+      background: rgba(56, 189, 248, 0.12);
+    }
+    .option-btn.selected {
+      border-color: var(--gold);
+      background: rgba(251, 191, 36, 0.18);
+    }
+    .option-btn.correct {
+      border-color: var(--emerald);
+      background: rgba(16, 185, 129, 0.24);
+    }
+    .option-btn.wrong {
+      border-color: var(--coral);
+      background: rgba(251, 113, 133, 0.2);
+    }
+
+    /* Umpan Balik Growth Mindset */
+    .feedback-banner {
+      padding: 16px;
+      border-radius: var(--radius-md);
+      margin-top: 16px;
+      border-left: 5px solid var(--gold);
+      background: rgba(251, 191, 36, 0.12);
+      display: none;
+    }
+    .feedback-banner.show { display: block; animation: fadeIn 0.25s ease; }
+    .feedback-banner.ok {
+      border-left-color: var(--emerald);
+      background: rgba(16, 185, 129, 0.16);
+    }
+
+    /* Dialog Karakter NPC */
+    .npc-dialog {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: var(--radius-md);
+      padding: 14px 18px;
+      margin-bottom: 18px;
+    }
+    .npc-avatar {
+      font-size: 2.4rem;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    /* Tabel Eksperimen Siswa */
+    .exp-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+    .exp-table th, .exp-table td {
+      border: 1px solid var(--border-glass);
+      padding: 10px;
+      text-align: center;
+    }
+    .exp-table th {
+      background: rgba(255,255,255,0.08);
+      color: var(--gold);
+    }
+
+    /* Susun Urutan Langkah (Drag/Click Reorder) */
+    .reorder-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+    }
+
+    /* Modal Umum */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(6px);
+      z-index: 250;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.open {
+      display: flex;
+    }
+    .modal-content {
+      background: #0b252d;
+      border: 2px solid var(--gold);
+      border-radius: var(--radius-lg);
+      max-width: 720px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    /* Footer */
+    .app-footer {
+      text-align: center;
+      padding: 18px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-glass);
+      background: rgba(4, 13, 16, 0.9);
+    }
+
+    /* Sertifikat Cetak */
+    .certificate-box {
+      border: 4px double var(--gold);
+      padding: 32px 24px;
+      border-radius: var(--radius-lg);
+      text-align: center;
+      background: linear-gradient(135deg, rgba(13,43,51,0.95), rgba(7,25,30,0.98));
+      margin: 20px 0;
+    }
+
+    @media print {
+      body { background: #fff !important; color: #000 !important; }
+      .topbar, .app-footer, .no-print { display: none !important; }
+      .certificate-box {
+        border: 6px double #b45309 !important;
+        background: #fff !important;
+        color: #000 !important;
+        box-shadow: none !important;
+      }
+      .certificate-box h2, .certificate-box h3 { color: #065f46 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BAR ATAS (HUD) -->
+  <header class="topbar">
+    <div class="brand-box">
+      <span>🧭</span>
+      <span>Ekspedisi Pulau Akar</span>
+    </div>
+
+    <div class="hud-stats" id="hudStats" style="display:none;">
+      <div class="hud-pill" title="Karakter Aktif">
+        <span id="hudAvatar">🦉</span>
+        <span id="hudName">Penjelajah</span>
+      </div>
+      <div class="hud-pill" title="Energi Semangat (Dapat dipulihkan kapan saja)">
+        <span>⚡</span>
+        <span id="hudEnergy">5/5</span>
+      </div>
+      <div class="hud-pill" title="Total Bintang">
+        <span>⭐</span>
+        <span id="hudStars">0</span>
+      </div>
+      <button class="btn btn-sm" onclick="openDiscoveryBook()" title="Buku Penemuan Teorema">
+        📖 Buku Penemuan
+      </button>
+      <button class="btn btn-sm" onclick="showScreen('screenMap')" title="Kembali ke Peta">
+        🗺️ Peta
+      </button>
+    </div>
+
+    <div class="hud-stats">
+      <div class="hud-pill" id="syncStatusPill" title="Status Penyimpanan Spreadsheet">
+        <span class="sync-dot local" id="syncDot"></span>
+        <span id="syncText">Siap</span>
+      </div>
+      <button class="btn btn-sm" id="btnMute" onclick="toggleAudio()" title="Suara Efek">
+        🔊 Suara
+      </button>
+      <button class="btn btn-sm" onclick="openTeacherModal()" title="Dasbor Guru (PIN: 1234)">
+        👩‍🏫 Guru
+      </button>
+    </div>
+  </header>
+
+  <main class="app-container">
+
+    <!-- ================= LAYAR 1: MASUK (LOGIN) ================= -->
+    <section id="screenLogin" class="screen active">
+      <div class="glass-card" style="max-width: 580px; margin: 20px auto;">
+        <div style="text-align:center; margin-bottom:20px;">
+          <div style="font-size:3.5rem;">🏝️🔐</div>
+          <h1 style="font-size:1.9rem; color:var(--gold);">Ekspedisi Pulau Akar</h1>
+          <p style="color:var(--text-muted);">Misteri Brankas Polinomial Benteng Otanaha — Matematika Tingkat Lanjut Kelas XI (Fase F)</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inputNama">Nama Lengkap Penjelajah *</label>
+          <input type="text" id="inputNama" class="form-input" placeholder="Ketik nama lengkapmu (misal: Siti Rahmawati)" autocomplete="name" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="inputKelas">Kelas *</label>
+          <input type="text" id="inputKelas" class="form-input" placeholder="Contoh: XI MIPA 1 / XI Lanjut A" />
+        </div>
+
+        <p id="loginError" style="color:var(--coral); font-weight:600; margin-bottom:12px; display:none;"></p>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:20px;">
+          <button class="btn btn-gold" style="flex:1;" onclick="handleLogin()">
+            🚀 Mulai Petualangan
+          </button>
+          <button class="btn" id="btnResumeSession" style="display:none;" onclick="resumeSavedSession()">
+            🔄 Lanjutkan Sesi Sebelumnya
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LAYAR 2: PILIH KARAKTER ================= -->
+    <section id="screenCharacter" class="screen">
+      <div class="glass-card">
+        <h2 style="color:var(--gold); text-align:center;">Pilih Karakter Penjelajahmu</h2>
+        <p style="text-align:center; color:var(--text-muted);">
+          Setiap karakter memiliki kekuatan sikap belajar (*Growth Mindset*) yang akan menemanimu memecahkan sandi suku banyak!
+        </p>
+
+        <div class="char-grid" id="charGrid"></div>
+
+        <div style="text-align:center; margin-top:20px;">
+          <button class="btn btn-gold" onclick="confirmCharacter()">
+            ✨ Pilih Karakter Ini & Lanjutkan
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LAYAR 3: SELAMAT DATANG ================= -->
+    <section id="screenWelcome" class="screen">
+      <div class="glass-card">
+        <div class="npc-dialog">
+          <div class="npc-avatar" id="welcomeAvatar">🦉</div>
+          <div>
+            <h3 style="color:var(--gold);" id="welcomeGreeting">Halo, Penjelajah!</h3>
+            <p id="welcomeTraitText"></p>
+          </div>
+        </div>
+
+        <div style="background:rgba(251, 191, 36, 0.14); border:2px dashed var(--gold); padding:16px; border-radius:var(--radius-md); text-align:center; margin:18px 0;">
+          <h3 style="color:var(--gold);">🌟 Semboyan Pulau Akar:</h3>
+          <p style="font-size:1.15rem; font-weight:700;">"Di dunia ini, salah itu bukan akhir, tapi petunjuk!"</p>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:14px; margin:18px 0;">
+          <div style="background:var(--bg-glass); padding:14px; border-radius:var(--radius-md);">
+            <h4 style="color:var(--cyan);">🗺️ 6 Zona Penemuan</h4>
+            <p style="font-size:0.92rem;">Kamu tidak diberi rumus di awal! Kamu akan bereksperimen dengan kalkulator Horner dan menemukan sendiri Teorema Sisa & Teorema Faktor.</p>
+          </div>
+          <div style="background:var(--bg-glass); padding:14px; border-radius:var(--radius-md);">
+            <h4 style="color:var(--gold);">💡 Petunjuk 3 Tingkat</h4>
+            <p style="font-size:0.92rem;">Jangan ragu membuka petunjuk (Isyarat $\rightarrow$ Langkah Awal $\rightarrow$ Contoh Serupa). Meminta bantuan saat berusaha adalah ciri pembelajar tangguh!</p>
+          </div>
+          <div style="background:var(--bg-glass); padding:14px; border-radius:var(--radius-md);">
+            <h4 style="color:var(--emerald);">⚡ Energi & Lencana Usaha</h4>
+            <p style="font-size:0.92rem;">Jika energimu berkurang, kamu bisa memulihkannya kapan saja dengan meninjau konsep tanpa penalti nilai.</p>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:20px;">
+          <button class="btn btn-gold" onclick="showScreen('screenStory')">
+            📜 Buka Kisah Brankas Polinomial
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LAYAR 4: NARASI PEMBUKA ================= -->
+    <section id="screenStory" class="screen">
+      <div class="glass-card">
+        <div style="background:linear-gradient(135deg, #064e3b, #0f172a); border-radius:var(--radius-md); padding:24px; border:1px solid var(--gold); margin-bottom:18px;">
+          <div style="font-size:2.6rem; text-align:center; margin-bottom:10px;">🏰⛰️📜</div>
+          <h2 style="color:var(--gold); text-align:center; margin-bottom:14px;">Misteri Brankas Polinomial di Puncak Otanaha</h2>
+          <p id="storyTypewriter" style="font-size:1.08rem; min-height:120px; line-height:1.75;"></p>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+          <button class="btn" onclick="skipTypewriter()">⏩ Tampilkan Semua Teks</button>
+          <button class="btn btn-gold" onclick="enterWorldMap()">🗺️ Buka Peta Pulau Akar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LAYAR 5: PETA DUNIA ================= -->
+    <section id="screenMap" class="screen">
+      <div class="glass-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+          <div>
+            <h2 style="color:var(--gold);">🗺️ Peta Ekspedisi Pulau Akar</h2>
+            <p style="color:var(--text-muted); font-size:0.95rem;">Selesaikan setiap zona secara berurutan untuk mengumpulkan 6 Kunci Faktor Brankas!</p>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn btn-sm btn-cyan" onclick="openDiscoveryBook()">📖 Buku Penemuan (<span id="bookCount">0</span>/6)</button>
+            <button class="btn btn-sm btn-gold" onclick="showScreen('screenFinal')">🏆 Layar Akhir & Sertifikat</button>
+          </div>
+        </div>
+
+        <!-- Bar Progres Keseluruhan -->
+        <div style="background:rgba(255,255,255,0.08); border-radius:99px; height:16px; overflow:hidden; margin-bottom:20px; border:1px solid var(--border-glass);">
+          <div id="mapProgressBar" style="height:100%; width:0%; background:linear-gradient(90deg, var(--emerald), var(--gold)); transition:width 0.4s ease;"></div>
+        </div>
+
+        <!-- Peta 6 Zona -->
+        <div class="map-wrapper">
+          <div class="zone-path-grid" id="zoneGrid"></div>
+        </div>
+
+        <!-- Koleksi Lencana Usaha (Growth Mindset Badges) -->
+        <div style="margin-top:22px;">
+          <h3 style="color:var(--gold); margin-bottom:10px;">🏅 Koleksi Lencana Usaha & Ketekunan</h3>
+          <div id="badgeContainer" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= LAYAR 6: ZONA PERMAINAN ================= -->
+    <section id="screenZone" class="screen">
+      <div class="glass-card">
+        <!-- Header Zona -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+          <div>
+            <span class="zone-badge-num" id="activeZoneTag">Zona 1</span>
+            <h2 style="color:var(--gold); margin-top:4px;" id="activeZoneTitle">Nama Zona</h2>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-sm" onclick="restoreEnergyModal()">⚡ Pulihkan Energi</button>
+            <button class="btn btn-sm" onclick="showScreen('screenMap')">⬅️ Peta</button>
+          </div>
+        </div>
+
+        <!-- Stepper Tahap Discovery Learning -->
+        <div class="discovery-stepper" id="zoneStepper"></div>
+
+        <!-- Konten Dinamis Tahap Zona -->
+        <div id="zoneStageContainer"></div>
+      </div>
+    </section>
+
+    <!-- ================= LAYAR 7: LAYAR AKHIR & SERTIFIKAT ================= -->
+    <section id="screenFinal" class="screen">
+      <div class="glass-card">
+        <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+          <h2 style="color:var(--gold);">🎉 Ringkasan Ekspedisi & Sertifikat</h2>
+          <div style="display:flex; gap:10px;">
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Cetak Sertifikat</button>
+            <button class="btn" onclick="showScreen('screenMap')">🗺️ Kembali ke Peta</button>
+          </div>
+        </div>
+
+        <!-- Sertifikat Siap Cetak -->
+        <div class="certificate-box">
+          <div style="font-size:3rem;">🏆📜⭐</div>
+          <h3 style="letter-spacing:2px; text-transform:uppercase; color:var(--emerald);">Sertifikat Penjelajah Polinomial</h3>
+          <p style="margin:8px 0;">Diberikan dengan bangga kepada:</p>
+          <h2 id="certName" style="font-size:2rem; color:var(--gold); margin:6px 0;">Nama Siswa</h2>
+          <p id="certClass" style="font-weight:600; margin-bottom:14px;">Kelas XI</p>
+          <p style="max-width:640px; margin:0 auto 16px;">
+            Telah menunjukkan ketekunan, kesabaran (*Growth Mindset*), dan penalaran matematis dalam menaklukkan tantangan <strong>Teorema Sisa, Teorema Faktor, Uji Akar Rasional, dan Pemfaktoran Suku Banyak</strong> pada Ekspedisi Pulau Akar.
+          </p>
+          <div style="display:flex; justify-content:center; gap:24px; flex-wrap:wrap; margin:18px 0; font-weight:700;">
+            <div>⭐ Total Bintang: <span id="certStars">0</span> / 18</div>
+            <div>🗺️ Zona Selesai: <span id="certZones">0</span> / 6</div>
+            <div>🏅 Lencana Usaha: <span id="certBadges">0</span></div>
+          </div>
+          <p id="certDate" style="font-size:0.9rem; color:var(--text-muted); margin-top:12px;"></p>
+        </div>
+
+        <div class="no-print" style="margin-top:20px; text-align:center;">
+          <button class="btn btn-gold" onclick="syncAllToCloud(true)">☁️ Kirim Ulang Semua Data ke Spreadsheet Guru</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL BUKU PENEMUAN -->
+  <div class="modal-backdrop" id="modalBook">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2 style="color:var(--gold);">📖 Buku Penemuan Teorema</h2>
+        <button class="btn btn-sm" onclick="closeModal('modalBook')">✖ Tutup</button>
+      </div>
+      <p style="color:var(--text-muted); margin-bottom:16px;">
+        Setiap teorema di bawah ini terbuka setelah kamu menemukannya sendiri lewat eksperimen di setiap zona!
+      </p>
+      <div id="bookEntriesContainer"></div>
+    </div>
+  </div>
+
+  <!-- MODAL PULIHKAN ENERGI -->
+  <div class="modal-backdrop" id="modalEnergy">
+    <div class="modal-content">
+      <h2 style="color:var(--gold); margin-bottom:10px;">⚡ Pos Pemulihan Energi</h2>
+      <p style="margin-bottom:14px;">
+        Dalam *Growth Mindset*, kehabisan energi bukan berarti gagal! Mari kita segarkan ingatanmu dengan satu prinsip kunci di bawah ini untuk memulihkan penuh 5 Energi:
+      </p>
+      <div style="background:rgba(16,185,129,0.15); border:1px solid var(--emerald); padding:16px; border-radius:var(--radius-md); margin-bottom:16px;">
+        <p><strong>Ingat Kembali:</strong> Jika kita membagi suku banyak $P(x)$ dengan $(x - k)$, maka nilai yang dimasukkan ke bagan Horner adalah $x = k$ (perhatikan perubahan tanda dari $-k$ menjadi $k$). Sisa pembagiannya selalu sama dengan nilai $P(k)$.</p>
+      </div>
+      <div style="text-align:right;">
+        <button class="btn btn-gold" onclick="refillEnergyNow()">⚡ Pulihkan 5 Energi Sekarang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DASBOR GURU -->
+  <div class="modal-backdrop" id="modalTeacher">
+    <div class="modal-content">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2 style="color:var(--gold);">👩‍🏫 Dasbor Analisis Guru</h2>
+        <button class="btn btn-sm" onclick="closeModal('modalTeacher')">✖ Tutup</button>
+      </div>
+
+      <div id="teacherLoginBox">
+        <p style="margin-bottom:10px;">Masukkan PIN Guru untuk melihat rekap capaian kelas dan analisis miskonsepsi (PIN standar: <strong>1234</strong>):</p>
+        <div style="display:flex; gap:10px;">
+          <input type="password" id="inputTeacherPin" class="form-input" placeholder="PIN Guru (1234)" />
+          <button class="btn btn-gold" onclick="verifyTeacherPin()">Buka</button>
+        </div>
+      </div>
+
+      <div id="teacherDashboardContent" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+          <span class="zone-badge-num">Data Sesi Lokal & Cloud Spreadsheet</span>
+          <button class="btn btn-sm btn-cyan" onclick="fetchTeacherCloudStats()">🔄 Muat Rekap dari Spreadsheet</button>
+        </div>
+        <div id="teacherStatsBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER KONTAK PENGEMBANG -->
+  <footer class="app-footer">
+    <div>
+      <strong>Ekspedisi Pulau Akar — Media Pembelajaran Matematika Tingkat Lanjut Kelas XI (Fase F)</strong>
+    </div>
+    <div style="margin-top:4px;">
+      Pengembang: <strong>Rahmat Djafar, S.Pd., Gr</strong> | Sekolah: <strong>SMA Islam Terpadu Al Ishlah</strong> | Instagram: <strong>@matdjafar</strong>
+    </div>
+  </footer>
+
+  <!-- ================= SCRIPT UTAMA (MESIN MATEMATIKA & LOGIKA GIM) ================= -->
+  <script>
+    /*************************************************************************
+     * 1. KONFIGURASI GOOGLE APPS SCRIPT & STATE UTAMA
+     *************************************************************************/
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz59fCt42qYQDCn4LGIZ9olpmDdb235WpSyjyf-mbzK-1TphrOZDJFLhusIQosBJ7APlg/exec"; // Ganti dengan URL Web App (/exec) dari Google Apps Script
+    const STORAGE_KEY_STATE = "pulau_akar_state_v1";
+    const STORAGE_KEY_QUEUE = "pulau_akar_offline_queue_v1";
+
+    // Daftar 6 Karakter Penjelajah (Netral Gender & Berorientasi Growth Mindset)
+    const CHARACTERS = [
+      {
+        id: "teliti",
+        name: "Binta Si Teliti",
+        avatar: "🦉",
+        trait: "Cermat memeriksa tanda positif/negatif dan koefisien nol pada bagan Horner.",
+        quote: "Ketelitian kecil hari ini menyelamatkan perhitungan besar esok hari!"
+      },
+      {
+        id: "gigih",
+        name: "Maleo Si Gigih",
+        avatar: "🦅",
+        trait: "Pantang menyerah menguji kandidat akar rasional sampai menemukan sisa 0.",
+        quote: "Belum ketemu akarnya? Berarti kita selangkah lebih dekat dengan kandidat yang tepat!"
+      },
+      {
+        id: "kreatif",
+        name: "Tarsius Si Kreatif",
+        avatar: "🐵",
+        trait: "Cepat melihat pola hubungan antara konstanta, koefisien, dan nilai P(k).",
+        quote: "Matematika itu bukan hafalan rumus, melainkan seni membaca pola!"
+      },
+      {
+        id: "sabar",
+        name: "Hiu Paus Si Sabar",
+        avatar: "🐋",
+        trait: "Tenang menguraikan suku banyak berderajat tinggi setahap demi setahap.",
+        quote: "Sabar dan berproses setahap demi setahap adalah kunci membuka brankas tersulit."
+      },
+      {
+        id: "kritis",
+        name: "Kompas Si Kritis",
+        avatar: "🦊",
+        trait: "Ahli mendeteksi letak miskonsepsi dan membuktikan kebenaran suatu dugaan.",
+        quote: "Jangan langsung percaya sebelum kamu mengujinya sendiri dengan contoh!"
+      },
+      {
+        id: "ikhtiar",
+        name: "Lentera Si Ikhtiar",
+        avatar: "🦌",
+        trait: "Menggabungkan usaha terbaik (ikhtiar), doa, dan evaluasi diri di setiap zona.",
+        quote: "Setiap usaha memahami ilmu adalah ibadah yang bernilai kebaikan."
+      }
+    ];
+
+    // Daftar Lencana Usaha (Growth Mindset Badges)
+    const BADGES_CATALOG = [
+      { id: "first_discovery", icon: "🔍", name: "Penemu Pola", desc: "Menemukan sendiri Teorema Sisa & Faktor lewat tabel eksperimen." },
+      { id: "persistent_3", icon: "🔥", name: "Pantang Menyerah", desc: "Mencoba kembali soal yang menantang hingga berhasil paham." },
+      { id: "hint_seeker", icon: "💡", name: "Pemburu Petunjuk Bijak", desc: "Menggunakan petunjuk bertingkat untuk memahami alur berpikir." },
+      { id: "error_detective", icon: "🕵️", name: "Detektif Miskonsepsi", desc: "Berhasil memperbaiki kekeliruan umum di Zona Belajar dari Kesalahan." },
+      { id: "level_improver", icon: "📈", name: "Naik Level", desc: "Mengulang zona dan berhasil meningkatkan capaian skor." },
+      { id: "master_factor", icon: "👑", name: "Penakluk Brankas Otanaha", desc: "Menyelesaikan seluruh 6 Zona Ekspedisi Pulau Akar." }
+    ];
+
+    // State Permainan Siswa
+    let gameState = {
+      sessionId: "SES-" + Date.now().toString(36).toUpperCase() + "-" + Math.random().toString(36).substring(2, 6).toUpperCase(),
+      nama: "",
+      kelas: "",
+      charId: "teliti",
+      startTime: new Date().toISOString(),
+      finishTime: "",
+      energy: 5,
+      unlockedZone: 1,
+      zones: {
+        1: { completed: false, stars: 0, bestScore: 0, attempts: 0, hintsUsed: [0,0,0], durationSec: 0 },
+        2: { completed: false, stars: 0, bestScore: 0, attempts: 0, hintsUsed: [0,0,0], durationSec: 0 },
+        3: { completed: false, stars: 0, bestScore: 0, attempts: 0, hintsUsed: [0,0,0], durationSec: 0 },
+        4: { completed: false, stars: 0, bestScore: 0, attempts: 0, hintsUsed: [0,0,0], durationSec: 0 },
+        5: { completed: false, stars: 0, bestScore: 0, attempts: 0, hintsUsed: [0,0,0], durationSec: 0 },
+        6: { completed: false, stars: 0, bestScore: 0, attempts: 0, hintsUsed: [0,0,0], durationSec: 0 }
+      },
+      badges: [],
+      discoveredTheorems: [],
+      answerLogs: [],
+      reflections: []
+    };
+
+    /*************************************************************************
+     * 2. EFEK SUARA RINGAN (WEB AUDIO API)
+     *************************************************************************/
+    let audioMuted = false;
+    let audioCtx = null;
+
+    function playSound(type) {
+      if (audioMuted) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === "click") {
+          osc.frequency.setValueAtTime(520, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === "correct") {
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.1);
+          osc.frequency.setValueAtTime(783.99, now + 0.2);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+          osc.start(now);
+          osc.stop(now + 0.42);
+        } else if (type === "hint" || type === "step") {
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.setValueAtTime(554.37, now + 0.09);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === "retry") {
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(340, now);
+          osc.frequency.setValueAtTime(290, now + 0.14);
+          gain.gain.setValueAtTime(0.1, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        }
+      } catch (e) {}
+    }
+
+    function toggleAudio() {
+      audioMuted = !audioMuted;
+      document.getElementById("btnMute").textContent = audioMuted ? "🔇 Bisu" : "🔊 Suara";
+    }
+
+    /*************************************************************************
+     * 3. MESIN MATEMATIKA POLINOMIAL (EVALUASI, HORNER, FORMAT LATEX, ACAK SOAL)
+     *************************************************************************/
+    const PolyEngine = {
+      // Evaluasi P(k) untuk array koefisien [a_n, a_{n-1}, ..., a_0]
+      evalPoly(coeffs, k) {
+        return coeffs.reduce((acc, c) => acc * k + c, 0);
+      },
+
+      // Menghitung skema Horner langkah demi langkah untuk pembagi (x - k)
+      hornerSteps(coeffs, k) {
+        const n = coeffs.length;
+        const mulRow = new Array(n).fill(null); // Baris hasil kali k * bawah
+        const resRow = new Array(n).fill(0);    // Baris hasil jumlah bawah
+        resRow[0] = coeffs[0];
+        for (let i = 1; i < n; i++) {
+          mulRow[i] = resRow[i - 1] * k;
+          resRow[i] = coeffs[i] + mulRow[i];
+        }
+        return {
+          coeffs,
+          k,
+          mulRow,
+          resRow,
+          quotientCoeffs: resRow.slice(0, n - 1),
+          remainder: resRow[n - 1]
+        };
+      },
+
+      // Membuat koefisien suku banyak dari akar-akar bulat [r1, r2, r3] dan koefisien utama a_n
+      fromRoots(roots, lead = 1) {
+        let poly = [lead];
+        for (const r of roots) {
+          const next = new Array(poly.length + 1).fill(0);
+          for (let i = 0; i < poly.length; i++) {
+            next[i] += poly[i];
+            next[i + 1] -= poly[i] * r;
+          }
+          poly = next;
+        }
+        return poly;
+      },
+
+      // Format array koefisien ke string LaTeX rapi, misal [1, 0, -7, 6] -> "x^3 - 7x + 6"
+      toLatex(coeffs, varName = "x") {
+        const deg = coeffs.length - 1;
+        let parts = [];
+        coeffs.forEach((c, idx) => {
+          if (c === 0) return;
+          const p = deg - idx;
+          const absC = Math.abs(c);
+          let sign = c < 0 ? " - " : (parts.length === 0 ? "" : " + ");
+          if (parts.length === 0 && c < 0) sign = "-";
+
+          let coeffStr = (absC === 1 && p > 0) ? "" : String(absC);
+          let varStr = p === 0 ? "" : (p === 1 ? varName : `${varName}^{${p}}`);
+          parts.push(`${sign}${coeffStr}${varStr}`);
+        });
+        return parts.length > 0 ? parts.join("") : "0";
+      },
+
+      // Format faktor linear (x - r) dari akar r
+      factorLatex(r) {
+        if (r === 0) return "x";
+        return r > 0 ? `(x - ${r})` : `(x + ${Math.abs(r)})`;
+      }
+    };
+
+    // Helper render MathJax pada elemen tertentu
+    function renderMath(el) {
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise(el ? [el] : undefined).catch(() => {});
+      }
+    }
+
+    /*************************************************************************
+     * 4. DEFINISI 6 ZONA & BANK PENEMUAN DISCOVERY LEARNING
+     *************************************************************************/
+    const ZONES_META = [
+      {
+        id: 1,
+        name: "Zona 1: Gerbang Pembagi",
+        subtitle: "Pemanasan Nilai Polinomial & Skema Horner",
+        icon: "⛩️",
+        theoremTitle: "Prinsip Skema Horner & Suku Nol",
+        theoremLatex: "Pada skema Horner untuk $P(x)$ dibagi $(x - k)$, setiap pangkat $x$ harus diwakili secara berurutan dari derajat tertinggi hingga konstanta. Jika ada suku yang tidak tertulis, koefisiennya wajib ditulis $0$."
+      },
+      {
+        id: 2,
+        name: "Zona 2: Lorong Sisa",
+        subtitle: "Penemuan Teorema Sisa",
+        icon: "🕯️",
+        theoremTitle: "Teorema Sisa (Remainder Theorem)",
+        theoremLatex: "Jika suku banyak $P(x)$ dibagi oleh $(x - k)$, maka sisa pembagiannya adalah $S = P(k)$. Jika dibagi oleh $(ax - b)$, maka sisanya adalah $S = P\\left(\\frac{b}{a}\\right)$."
+      },
+      {
+        id: 3,
+        name: "Zona 3: Jembatan Faktor",
+        subtitle: "Penemuan Teorema Faktor",
+        icon: "🌉",
+        theoremTitle: "Teorema Faktor (Factor Theorem)",
+        theoremLatex: "Bentuk linear $(x - k)$ merupakan faktor dari suku banyak $P(x)$ jika dan hanya jika $P(k) = 0$ (sisa pembagiannya sama dengan nol)."
+      },
+      {
+        id: 4,
+        name: "Zona 4: Hutan Akar Rasional",
+        subtitle: "Strategi Uji Kandidat Akar Rasional",
+        icon: "🌲",
+        theoremTitle: "Teorema Akar Rasional",
+        theoremLatex: "Jika persamaan suku banyak $a_n x^n + \\dots + a_0 = 0$ dengan koefisien bulat memiliki akar rasional $\\frac{p}{q}$, maka $p$ adalah faktor bulat dari konstanta $a_0$ dan $q$ adalah faktor bulat dari koefisien utama $a_n$."
+      },
+      {
+        id: 5,
+        name: "Zona 5: Menara Pemfaktoran",
+        subtitle: "Pemfaktoran Lengkap Derajat ≥ 3",
+        icon: "🗼",
+        theoremTitle: "Prosedur Pemfaktoran Lengkap Suku Banyak",
+        theoremLatex: "Untuk memfaktorkan $P(x)$ berderajat $n \\ge 3$: (1) Cari satu akar $x = k$ sehingga $P(k)=0$, (2) Gunakan Horner untuk memperoleh hasil bagi $H(x)$ berderajat $n-1$, (3) Faktorkan $H(x)$ hingga menjadi faktor-faktor linear atau kuadrat definit ($\\Delta = b^2 - 4ac < 0$)."
+      },
+      {
+        id: 6,
+        name: "Zona 6: Kota Masalah Nyata",
+        subtitle: "Parameter, Masalah Kontekstual & HOTS",
+        icon: "🏛️",
+        theoremTitle: "Aplikasi Polinomial & Sifat Akar $x = 1$",
+        theoremLatex: "Khusus untuk $x = 1$, nilai $P(1)$ sama dengan jumlah seluruh koefisien suku banyak. Jika jumlah seluruh koefisien $P(x)$ sama dengan $0$, maka $P(1) = 0$ sehingga $(x - 1)$ pasti merupakan faktor tanpa perlu membagi panjang!"
+      }
+    ];
+
+    /*************************************************************************
+     * 5. PENYIMPANAN LOKAL & SINKRONISASI KE GOOGLE SPREADSHEET (OFFLINE QUEUE)
+     *************************************************************************/
+    function saveLocalState() {
+      try {
+        localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(gameState));
+      } catch (e) {}
+      updateHUD();
+    }
+
+    function loadLocalState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY_STATE);
+        if (!raw) return false;
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.nama) {
+          gameState = Object.assign(gameState, parsed);
+          return true;
+        }
+      } catch (e) {}
+      return false;
+    }
+
+    function enqueueCloudPayload(actionType, payloadData) {
+      let queue = [];
+      try {
+        queue = JSON.parse(localStorage.getItem(STORAGE_KEY_QUEUE) || "[]");
+      } catch (e) {}
+      queue.push({
+        id: "Q-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6),
+        timestamp: new Date().toISOString(),
+        action: actionType,
+        sessionId: gameState.sessionId,
+        nama: gameState.nama,
+        kelas: gameState.kelas,
+        data: payloadData
+      });
+      localStorage.setItem(STORAGE_KEY_QUEUE, JSON.stringify(queue));
+      processCloudQueue();
+    }
+
+    async function processCloudQueue() {
+      const dot = document.getElementById("syncDot");
+      const txt = document.getElementById("syncText");
+      let queue = [];
+      try {
+        queue = JSON.parse(localStorage.getItem(STORAGE_KEY_QUEUE) || "[]");
+      } catch (e) {}
+
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === "ISI_URL_WEB_APP") {
+        dot.className = "sync-dot local";
+        txt.textContent = `Tersimpan Lokal (${queue.length} antrean)`;
+        return;
+      }
+
+      if (queue.length === 0) {
+        dot.className = "sync-dot";
+        txt.textContent = "Tersimpan di Cloud";
+        return;
+      }
+
+      dot.className = "sync-dot pending";
+      txt.textContent = `Mengirim (${queue.length})...`;
+
+      try {
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            batch: queue,
+            studentSummary: buildStudentSummaryPayload()
+          })
+        });
+        if (response.ok) {
+          localStorage.setItem(STORAGE_KEY_QUEUE, "[]");
+          dot.className = "sync-dot";
+          txt.textContent = "Tersimpan di Cloud";
+        } else {
+          throw new Error("HTTP error");
+        }
+      } catch (err) {
+        dot.className = "sync-dot pending";
+        txt.textContent = `Antrean Offline (${queue.length})`;
+      }
+    }
+
+    function buildStudentSummaryPayload() {
+      const totalStars = Object.values(gameState.zones).reduce((s, z) => s + (z.stars || 0), 0);
+      return {
+        sessionId: gameState.sessionId,
+        nama: gameState.nama,
+        kelas: gameState.kelas,
+        karakter: gameState.charId,
+        waktuMulai: gameState.startTime,
+        waktuSelesai: gameState.finishTime || new Date().toISOString(),
+        totalBintang: totalStars,
+        lencana: gameState.badges.join(", ")
+      };
+    }
+
+    function syncAllToCloud(manualAlert = false) {
+      enqueueCloudPayload("SYNC_SUMMARY", buildStudentSummaryPayload());
+      if (manualAlert) {
+        const dot = document.getElementById("syncDot");
+        const txt = document.getElementById("syncText");
+        if (txt) txt.textContent = "Sinkronisasi Dijadwalkan ✓";
+        if (dot) dot.className = "sync-dot";
+      }
+    }
+
+    window.addEventListener("online", () => processCloudQueue());
+
+    /*************************************************************************
+     * 6. MANAJEMEN LAYAR & ALUR AWAL GIM
+     *************************************************************************/
+    function showScreen(screenId) {
+      playSound("click");
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      const target = document.getElementById(screenId);
+      if (target) target.classList.add("active");
+
+      const hud = document.getElementById("hudStats");
+      if (["screenMap", "screenZone", "screenFinal"].includes(screenId)) {
+        hud.style.display = "flex";
+      }
+      if (screenId === "screenMap") renderWorldMap();
+      if (screenId === "screenFinal") renderFinalScreen();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      renderMath(target);
+    }
+
+    function updateHUD() {
+      const charObj = CHARACTERS.find(c => c.id === gameState.charId) || CHARACTERS[0];
+      document.getElementById("hudAvatar").textContent = charObj.avatar;
+      document.getElementById("hudName").textContent = gameState.nama || "Penjelajah";
+      document.getElementById("hudEnergy").textContent = `${gameState.energy}/5`;
+      const totalStars = Object.values(gameState.zones).reduce((s, z) => s + (z.stars || 0), 0);
+      document.getElementById("hudStars").textContent = totalStars;
+      document.getElementById("bookCount").textContent = gameState.discoveredTheorems.length;
+    }
+
+    function handleLogin() {
+      const nama = document.getElementById("inputNama").value.trim();
+      const kelas = document.getElementById("inputKelas").value.trim();
+      const errEl = document.getElementById("loginError");
+
+      if (nama.length < 3 || kelas.length < 2) {
+        errEl.textContent = "Mohon isi Nama Lengkap (minimal 3 karakter) dan Kelasmu terlebih dahulu ya!";
+        errEl.style.display = "block";
+        playSound("retry");
+        return;
+      }
+      errEl.style.display = "none";
+      gameState.nama = nama;
+      gameState.kelas = kelas;
+      saveLocalState();
+      renderCharacterSelection();
+      showScreen("screenCharacter");
+    }
+
+    function resumeSavedSession() {
+      if (loadLocalState()) {
+        updateHUD();
+        showScreen("screenMap");
+      }
+    }
+
+    function renderCharacterSelection() {
+      const grid = document.getElementById("charGrid");
+      grid.innerHTML = CHARACTERS.map(c => `
+        <div class="char-card ${gameState.charId === c.id ? 'selected' : ''}" onclick="selectCharacter('${c.id}')">
+          <div class="char-avatar">${c.avatar}</div>
+          <h3 style="color:var(--gold); margin-bottom:6px;">${c.name}</h3>
+          <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:8px;">${c.trait}</p>
+          <p style="font-size:0.82rem; font-style:italic; color:var(--cyan);">"${c.quote}"</p>
+        </div>
+      `).join("");
+    }
+
+    function selectCharacter(id) {
+      playSound("click");
+      gameState.charId = id;
+      renderCharacterSelection();
+    }
+
+    function confirmCharacter() {
+      saveLocalState();
+      const charObj = CHARACTERS.find(c => c.id === gameState.charId) || CHARACTERS[0];
+      document.getElementById("welcomeAvatar").textContent = charObj.avatar;
+      document.getElementById("welcomeGreeting").textContent = `Selamat datang, ${gameState.nama} bersama ${charObj.name}!`;
+      document.getElementById("welcomeTraitText").textContent = `${charObj.trait} "${charObj.quote}"`;
+      showScreen("screenWelcome");
+    }
+
+    // Efek Mengetik Narasi Pembuka
+    const STORY_TEXT = "Di puncak perbukitan Benteng Otanaha, Gorontalo, para leluhur meninggalkan sebuah 'Brankas Polinomial' yang menyimpan naskah ilmu pengetahuan Nusantara. Brankas tersebut dikunci oleh sebuah Suku Banyak Raksasa berderajat tinggi! Kuncinya bukanlah paksaan, melainkan kombinasi faktor-faktor linear yang membuat sisa pembagiannya bernilai nol. Hanya Penjelajah yang sabar berikhtiar, teliti menggunakan skema Horner, dan mampu menemukan sendiri Teorema Sisa serta Teorema Faktor yang dapat memecah polinomial itu dan membuka brankasnya!";
+    let storyTimer = null;
+
+    function startStoryTypewriter() {
+      const el = document.getElementById("storyTypewriter");
+      el.textContent = "";
+      let i = 0;
+      clearInterval(storyTimer);
+      storyTimer = setInterval(() => {
+        if (i < STORY_TEXT.length) {
+          el.textContent += STORY_TEXT.charAt(i);
+          i++;
+        } else {
+          clearInterval(storyTimer);
+        }
+      }, 22);
+    }
+
+    function skipTypewriter() {
+      clearInterval(storyTimer);
+      document.getElementById("storyTypewriter").textContent = STORY_TEXT;
+    }
+
+    function enterWorldMap() {
+      clearInterval(storyTimer);
+      enqueueCloudPayload("STUDENT_START", buildStudentSummaryPayload());
+      showScreen("screenMap");
+    }
+
+    // Observer layar cerita agar typewriter jalan otomatis
+    const origShowScreen = showScreen;
+    showScreen = function(id) {
+      origShowScreen(id);
+      if (id === "screenStory") startStoryTypewriter();
+    };
+
+    /*************************************************************************
+     * 7. RENDER PETA DUNIA & LENCANA
+     *************************************************************************/
+    function renderWorldMap() {
+      updateHUD();
+      const charObj = CHARACTERS.find(c => c.id === gameState.charId) || CHARACTERS[0];
+      const completedCount = Object.values(gameState.zones).filter(z => z.completed).length;
+      const pct = Math.round((completedCount / 6) * 100);
+      document.getElementById("mapProgressBar").style.width = `${pct}%`;
+
+      const grid = document.getElementById("zoneGrid");
+      grid.innerHTML = ZONES_META.map(zm => {
+        const zState = gameState.zones[zm.id];
+        const isUnlocked = zm.id <= gameState.unlockedZone;
+        const isCurrent = zm.id === gameState.unlockedZone;
+        const starsStr = "⭐".repeat(zState.stars) + "☆".repeat(3 - zState.stars);
+
+        return `
+          <div class="zone-node ${isUnlocked ? 'unlocked' : 'locked'}" onclick="${isUnlocked ? `startZone(${zm.id})` : ''}">
+            <div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <span class="zone-badge-num">${zm.icon} Zona ${zm.id}</span>
+                <span style="font-size:1.1rem;">${isUnlocked ? starsStr : '🔒 Terkunci'}</span>
+              </div>
+              <h3 style="color:var(--gold); margin-bottom:4px;">${zm.name.replace(/^Zona \d+:\s*/, '')}</h3>
+              <p style="font-size:0.9rem; color:var(--text-muted);">${zm.subtitle}</p>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding-top:10px; border-top:1px solid var(--border-glass);">
+              <span style="font-size:0.85rem; color:var(--cyan);">
+                ${isCurrent ? `${charObj.avatar} Posisimu Saat Ini` : (zState.completed ? `✅ Skor Terbaik: ${zState.bestScore}` : 'Selesaikan zona sebelumnya')}
+              </span>
+              <button class="btn btn-sm ${isUnlocked ? 'btn-primary' : ''}" ${!isUnlocked ? 'disabled' : ''}>
+                ${zState.completed ? '🔄 Ulangi' : '▶️ Masuk'}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      // Render Lencana Usaha
+      const badgeEl = document.getElementById("badgeContainer");
+      badgeEl.innerHTML = BADGES_CATALOG.map(b => {
+        const owned = gameState.badges.includes(b.id);
+        return `
+          <div style="padding:10px 14px; border-radius:var(--radius-md); border:1px solid ${owned ? 'var(--gold)' : 'var(--border-glass)'}; background:${owned ? 'rgba(251,191,36,0.16)' : 'rgba(255,255,255,0.04)'}; opacity:${owned ? '1' : '0.5'}; display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.6rem;">${b.icon}</span>
+            <div>
+              <div style="font-weight:700; font-size:0.92rem; color:${owned ? 'var(--gold)' : 'var(--text-main)'};">${b.name}</div>
+              <div style="font-size:0.8rem; color:var(--text-muted);">${b.desc}</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function awardBadge(badgeId) {
+      if (!gameState.badges.includes(badgeId)) {
+        gameState.badges.push(badgeId);
+        saveLocalState();
+      }
+    }
+
+    /*************************************************************************
+     * 8. GENERATOR DATA ZONA DINAMIS (DISCOVERY LEARNING 6 TAHAP + SOAL ACAK)
+     *************************************************************************/
+    let activeZoneSession = null;
+
+    function buildZoneContent(zoneId) {
+      // Buat polinomial acak dengan akar bulat rapi untuk tiap zona agar siswa tidak menghafal kunci
+      if (zoneId === 1) {
+        // Zona 1: Diagnostik Nilai Suku Banyak & Horner dengan Suku Nol
+        const kVal = [2, -2, 3][Math.floor(Math.random() * 3)];
+        const cConst = [4, -5, 6][Math.floor(Math.random() * 3)];
+        // P(x) = x^3 + 0x^2 - 4x + cConst
+        const coeffs = [1, 0, -4, cConst];
+        const polyLatex = PolyEngine.toLatex(coeffs);
+        const rem = PolyEngine.evalPoly(coeffs, kVal);
+
+        return {
+          zoneId: 1,
+          goalOptions: [
+            "Aku ingin mahir menyusun koefisien ke bagan Horner tanpa melupakan suku berpangkat yang hilang (koefisien 0).",
+            "Aku ingin memahami hubungan cara substitusi langsung dan skema Horner.",
+            "Aku ingin teliti menghitung perkalian dan penjumlahan bilangan bulat positif maupun negatif."
+          ],
+          stimulation: `Di depan <strong>Gerbang Pembagi Benteng Otanaha</strong>, terdapat ukiran suku banyak $P(x) = ${polyLatex}$. Penjaga gerbang meminta kita menguji nilai $x = ${kVal}$ menggunakan skema Horner. Namun, perhatikan baik-baik: apakah suku $x^2$ terlihat tertulis pada $P(x)$?`,
+          problemQuestion: "Mengapa kita wajib menuliskan angka 0 pada posisi koefisien $x^2$ saat menyusun bagan Horner untuk $P(x) = " + polyLatex + "$?",
+          problemChoices: [
+            { text: "Karena skema Horner mengurutkan pangkat secara turun satu demi satu, sehingga suku $x^2$ yang tidak tertulis memiliki koefisien $0$.", correct: true, fb: "Tepat sekali! Setiap kolom pada bagan Horner mewakili nilai tempat pangkat $x$ secara berurutan." },
+            { text: "Karena semua pembagian suku banyak harus selalu dimulai dari angka 0.", correct: false, fb: "Belum tepat. Angka 0 hanya ditulis pada posisi derajat suku yang tidak tampak pada ekspresi polinomial." },
+            { text: "Agar jumlah kolom bagan Horner selalu genap.", correct: false, fb: "Belum tepat. Banyaknya kolom pada bagan Horner selalu sama dengan $(\\text{derajat } P(x)) + 1$." }
+          ],
+          hornerLab: {
+            coeffs: coeffs,
+            defaultK: kVal,
+            candidateKs: [-2, 1, 2, 3],
+            prompt: `Klik tombol <strong>"Jalankan Langkah Horner"</strong> untuk $P(x) = ${polyLatex}$ pada $k = ${kVal}$, lalu amati baris paling bawah!`
+          },
+          processingPrompt: `Berdasarkan percobaan skema Horner untuk $P(x) = ${polyLatex}$ dengan $k = ${kVal}$, berapakah nilai di kotak paling kanan bawah (Sisa) dan berapa pula nilai substitusi langsung $P(${kVal}) = (${kVal})^3 - 4(${kVal}) + (${cConst})$?`,
+          processingAnswer: rem,
+          verificationClaim: `Seorang penjelajah lain mengklaim bahwa untuk $Q(x) = 2x^3 - 5x + 1$, barisan koefisien Hornernya adalah $[2, -5, 1]$ (hanya 3 kolom). Apakah klaim ini benar atau keliru?`,
+          verificationOptions: [
+            { text: "Keliru, seharusnya $[2, 0, -5, 1]$ karena koefisien $x^2$ adalah $0$.", correct: true, fb: "Hebat! Kamu sangat teliti memperhatikan suku $x^2$ yang berkoefisien $0$." },
+            { text: "Benar, karena suku yang bernilai nol boleh diabaikan.", correct: false, fb: "Hati-hati! Jika koefisien $0$ diabaikan, derajat polinomial akan turun dari 3 menjadi 2 dan hasil baginya menjadi tidak tepat." }
+          ],
+          generalizationCloze: {
+            sentence: "Pada skema Horner untuk polinomial berderajat $n$, terdapat tepat ___ kolom koefisien, dan suku yang tidak tertulis wajib diisi dengan koefisien ___.",
+            options: [
+              { text: "$n + 1$ kolom dan koefisien $0$", correct: true },
+              { text: "$n$ kolom dan koefisien $1$", correct: false },
+              { text: "$n - 1$ kolom dan koefisien $-1$", correct: false }
+            ]
+          },
+          misconceptionCase: {
+            title: "Kasus Kekeliruan Umum #1: Lupa Koefisien Nol",
+            story: "Raka membagi $P(x) = x^3 - 7x + 6$ dengan $(x - 2)$. Ia menulis baris atas Horner sebagai `[1, -7, 6]` lalu menyimpulkan sisanya adalah $-4$.",
+            question: "Di manakah letak kekeliruan berpikir Raka dan berapa sisa yang sebenarnya?",
+            tag: "suku_nol_hilang",
+            options: [
+              { text: "Raka melewatkan koefisien $0$ untuk suku $x^2$. Jika ditulis `[1, 0, -7, 6]`, maka untuk $k = 2$ diperoleh sisa $0$.", correct: true, fb: "Analisis yang tajam! Dengan baris atas `[1, 0, -7, 6]` dan $k=2$, sisa pembagiannya adalah $0$." },
+              { text: "Raka seharusnya memakai $k = -2$, bukan $k = 2$.", correct: false, fb: "Pembaginya adalah $(x - 2)$, jadi pembuat nolnya memang $x = 2$. Kekeliruan Raka ada pada baris koefisien atas." },
+              { text: "Perhitungan Raka sudah benar, sisanya memang $-4$.", correct: false, fb: "Coba substitusi $P(2) = 2^3 - 7(2) + 6 = 8 - 14 + 6 = 0$. Mengapa hasil Horner Raka berbeda?" }
+            ]
+          },
+          questions: generateZoneQuestions(1)
+        };
+      }
+
+      if (zoneId === 2) {
+        // Zona 2: Penemuan Teorema Sisa
+        const roots = [1, -2, 3];
+        const coeffs = PolyEngine.fromRoots(roots, 1); // x^3 - 2x^2 - 5x + 6
+        const polyLatex = PolyEngine.toLatex(coeffs);
+        const testK = 2;
+        const remK = PolyEngine.evalPoly(coeffs, testK); // P(2) = -4
+
+        return {
+          zoneId: 2,
+          goalOptions: [
+            "Aku ingin menemukan sendiri hubungan antara sisa pembagian $(x - k)$ dan nilai fungsi $P(k)$.",
+            "Aku ingin memahami mengapa Teorema Sisa mempercepat pencarian sisa tanpa pembagian bersusun.",
+            "Aku ingin mampu menentukan sisa pembagian untuk pembagi berbentuk $(ax - b)$."
+          ],
+          stimulation: `Di <strong>Lorong Sisa</strong>, terdapat prasasti $P(x) = ${polyLatex}$. Para penjelajah terdahulu kelelahan karena harus membagi bersusun setiap kali ingin mencari sisa pembagian oleh $(x - k)$. Apakah ada rahasia di balik nilai $P(k)$ dan sisa pembagian?`,
+          problemQuestion: "Pertanyaan Detektif manakah yang paling tepat untuk menyelidiki hubungan antara nilai suku banyak $P(k)$ dan sisa pembagian $P(x)$ oleh $(x - k)$?",
+          problemChoices: [
+            { text: "Apakah sisa pembagian $P(x)$ oleh $(x - k)$ selalu bernilai sama dengan hasil substitusi $P(k)$ untuk setiap nilai $k$?", correct: true, fb: "Pertanyaan detektif yang brilian! Mari kita buktikan dengan menguji beberapa nilai $k$ di laboratorium Horner." },
+            { text: "Apakah derajat hasil bagi selalu lebih besar daripada derajat $P(x)$?", correct: false, fb: "Derajat hasil bagi oleh $(x - k)$ selalu berkurang 1. Fokus kita di lorong ini adalah menyelidiki nilai Sisa." }
+          ],
+          hornerLab: {
+            coeffs: coeffs,
+            defaultK: testK,
+            candidateKs: [-1, 0, 2, 4],
+            prompt: `Coba ubah-ubah nilai $k$ pada simulator Horner untuk $P(x) = ${polyLatex}$ dan bandingkan kolom <strong>Sisa Horner</strong> dengan perhitungan langsung $P(k)$!`
+          },
+          processingPrompt: `Untuk $P(x) = ${polyLatex}$, saat kamu memilih pembagi $(x - 2)$ (yaitu $k = 2$), berapakah nilai Sisa Horner dan nilai $P(2)$ yang kamu temukan?`,
+          processingAnswer: remK,
+          verificationClaim: `Ingat persamaan dasar pembagian: $P(x) = (x - k) \\cdot H(x) + S$. Mengapa saat kita mensubstitusikan $x = k$, nilai $P(k)$ pasti sama dengan $S$?`,
+          verificationOptions: [
+            { text: "Karena untuk $x = k$, suku $(k - k) \\cdot H(k)$ bernilai $0 \\cdot H(k) = 0$, sehingga tersisa $P(k) = S$.", correct: true, fb: "Pembuktian aljabar yang sempurna! Inilah alasan logis mengapa Sisa selalu sama dengan $P(k)$." },
+            { text: "Karena hasil bagi $H(x)$ selalu bernilai $0$ untuk semua nilai $x$.", correct: false, fb: "Bukan $H(x)$ yang nol, melainkan faktor $(x - k)$ yang menjadi $(k - k) = 0$ saat $x = k$." }
+          ],
+          generalizationCloze: {
+            sentence: "Teorema Sisa: Jika suku banyak $P(x)$ dibagi oleh $(x - k)$, maka sisa pembagiannya adalah $S = $ ___. Jika dibagi oleh $(ax - b)$, maka sisanya adalah $S = $ ___.",
+            options: [
+              { text: "$P(k)$ dan $P\\left(\\frac{b}{a}\\right)$", correct: true },
+              { text: "$P(-k)$ dan $P\\left(-\\frac{b}{a}\\right)$", correct: false },
+              { text: "$P(0)$ dan $P(ab)$", correct: false }
+            ]
+          },
+          misconceptionCase: {
+            title: "Kasus Kekeliruan Umum #2: Tanda Pembagi Terbalik",
+            story: "Nadia diminta mencari sisa pembagian $P(x) = x^3 + 2x^2 - 5x - 6$ oleh $(x + 3)$. Ia langsung menghitung $P(3) = 3^3 + 2(3)^2 - 5(3) - 6 = 24$.",
+            question: "Mengapa langkah Nadia belum tepat dan berapa sisa yang seharusnya?",
+            tag: "tanda_terbalik",
+            options: [
+              { text: "Pembaginya $(x + 3) = (x - (-3))$, sehingga pembuat nolnya adalah $k = -3$. Seharusnya ia menghitung $P(-3) = 0$.", correct: true, fb: "Tepat sekali! Cari pembuat nol pembagi terlebih dahulu: $x + 3 = 0 \\implies x = -3$." },
+              { text: "Nadia salah menjumlahkan $27 + 18 - 15 - 6$.", correct: false, fb: "Hitungan aritmetika Nadia untuk $P(3)$ benar, tetapi nilai $k$ yang disubstitusikan terbalik tandanya." }
+            ]
+          },
+          questions: generateZoneQuestions(2)
+        };
+      }
+
+      if (zoneId === 3) {
+        // Zona 3: Penemuan Teorema Faktor
+        const r1 = 1, r2 = 2, r3 = -3;
+        const coeffs = PolyEngine.fromRoots([r1, r2, r3], 1); // x^3 - 7x + 6
+        const polyLatex = PolyEngine.toLatex(coeffs);
+
+        return {
+          zoneId: 3,
+          goalOptions: [
+            "Aku ingin menemukan syarat kapan $(x - k)$ disebut sebagai faktor dari $P(x)$.",
+            "Aku ingin menghubungkan Teorema Sisa ($S = 0$) menjadi Teorema Faktor.",
+            "Aku ingin mampu menguji apakah suatu bentuk linear merupakan faktor suku banyak."
+          ],
+          stimulation: `Kita tiba di <strong>Jembatan Faktor</strong>! Jembatan ini hanya akan membentang jika kita memasukkan nilai $k$ yang membuat polinomial $P(x) = ${polyLatex}$ terbagi habis tanpa sisa ($\text{Sisa} = 0$). Ingat pada bilangan bulat: $3$ adalah faktor dari $12$ karena $12 \\div 3 = 4$ bersisa $0$.`,
+          problemQuestion: "Berdasarkan analogi bilangan bulat dan Teorema Sisa, kapankah bentuk linear $(x - k)$ dapat disebut sebagai FAKTOR dari suku banyak $P(x)$?",
+          problemChoices: [
+            { text: "Ketika pembagian $P(x)$ oleh $(x - k)$ menghasilkan sisa $0$, atau dengan kata lain nilai $P(k) = 0$.", correct: true, fb: "Luar biasa! Kamu berhasil menghubungkan konsep faktor bilangan dengan Teorema Sisa." },
+            { text: "Ketika nilai $P(k)$ menghasilkan bilangan positif terbesar.", correct: false, fb: "Ingat kembali: suatu pembagi disebut faktor jika membagi habis (tidak bersisa)." }
+          ],
+          hornerLab: {
+            coeffs: coeffs,
+            defaultK: 1,
+            candidateKs: [-3, -1, 1, 2, 3],
+            prompt: `Uji nilai $k \\in \\{-3, -1, 1, 2, 3\\}$ pada simulator Horner untuk $P(x) = ${polyLatex}$. Temukan tiga nilai $k$ yang menghasilkan <strong>Sisa = 0</strong>!`
+          },
+          processingPrompt: `Dari eksperimen Horner pada $P(x) = ${polyLatex}$ di atas, ketika kamu menguji $k = 2$, berapakah nilai sisa $P(2)$ yang muncul?`,
+          processingAnswer: 0,
+          verificationClaim: `Saat $P(k) = 0$, persamaan pembagian $P(x) = (x - k) \\cdot H(x) + P(k)$ berubah menjadi $P(x) = (x - k) \\cdot H(x)$. Apakah pernyataan ini berlaku dua arah (jika dan hanya jika)?`,
+          verificationOptions: [
+            { text: "Ya, berlaku dua arah: $(x - k)$ faktor dari $P(x) \\iff P(k) = 0$.", correct: true, fb: "Tepat! Jika $(x-k)$ faktor maka $P(k)=0$, dan sebaliknya jika $P(k)=0$ maka $(x-k)$ pasti faktor." },
+            { text: "Hanya berlaku satu arah saja.", correct: false, fb: "Perhatikan bentuk $P(x) = (x-k)H(x) + P(k)$. Kedua arah saling mengunci secara ekuivalen!" }
+          ],
+          generalizationCloze: {
+            sentence: "Teorema Faktor: Suku banyak $P(x)$ mempunyai faktor $(x - k)$ jika dan hanya jika nilai ___ $= 0$, yang berarti $x = k$ adalah ___ dari persamaan $P(x) = 0$.",
+            options: [
+              { text: "$P(k) = 0$ dan $x = k$ adalah akar", correct: true },
+              { text: "$P(0) = k$ dan $x = 0$ adalah koefisien", correct: false },
+              { text: "$P(-k) = 1$ dan $x = k$ adalah derajat", correct: false }
+            ]
+          },
+          misconceptionCase: {
+            title: "Kasus Kekeliruan Umum #3: Menyimpulkan Faktor Saat Sisa Bukan Nol",
+            story: "Dimas menguji apakah $(x - 1)$ adalah faktor dari $P(x) = x^3 + x^2 - 4x + 1$. Ia menghitung $P(1) = 1 + 1 - 4 + 1 = -1$, lalu menyimpulkan $(x - 1)$ adalah faktor karena hasilnya bilangan bulat kecil.",
+            question: "Bagaimana kamu meluruskan kesimpulan Dimas?",
+            tag: "sisa_bukan_nol",
+            options: [
+              { text: "Karena $P(1) = -1 \\neq 0$, maka pembagian menyisakan $-1$ sehingga $(x - 1)$ BUKAN faktor dari $P(x)$.", correct: true, fb: "Koreksi yang sangat jelas! Syarat mutlak faktor adalah sisa pembagian harus tepat bernilai $0$." },
+              { text: "Karena $P(1) = -1$, berarti faktornya adalah $(x + 1)$.", correct: false, fb: "Nilai $P(1) = -1$ adalah sisa pembagian oleh $(x - 1)$, bukan penentu tanda faktor." }
+            ]
+          },
+          questions: generateZoneQuestions(3)
+        };
+      }
+
+      if (zoneId === 4) {
+        // Zona 4: Hutan Akar Rasional
+        const coeffs = [2, -3, -8, -3]; // (2x + 1)(x - 3)(x + 1) = 2x^3 - 3x^2 - 8x - 3
+        const polyLatex = PolyEngine.toLatex(coeffs);
+
+        return {
+          zoneId: 4,
+          goalOptions: [
+            "Aku ingin tahu cara mendaftar kandidat akar rasional tanpa menebak-nebak secara acak.",
+            "Aku ingin memahami hubungan faktor konstanta $a_0$ dan faktor koefisien utama $a_n$.",
+            "Aku ingin menyusun strategi efisien dalam menguji kandidat akar."
+          ],
+          stimulation: `Di <strong>Hutan Akar Rasional</strong>, kita menghadapi polinomial $P(x) = ${polyLatex}$. Tidak mungkin kita mencoba semua bilangan di dunia satu per satu! Untungnya, petunjuk akar-akar rasional $x = \\frac{p}{q}$ tersembunyi pada <strong>konstanta ujung ($a_0 = -3$)</strong> dan <strong>koefisien utama ($a_3 = 2$)</strong>.`,
+          problemQuestion: "Jika $P(x) = 2x^3 - 3x^2 - 8x - 3$ dapat difaktorkan menjadi $(2x + 1)(x + 1)(x - 3)$, dari manakah asal angka pembilang dan penyebut pada akar-akarnya ($x = -\\frac{1}{2}, -1, 3$)?",
+          problemChoices: [
+            { text: "Pembilang $p$ selalu membagi habis konstanta $-3$ (faktor: $\\pm 1, \\pm 3$), dan penyebut $q$ selalu membagi habis koefisien utama $2$ (faktor: $\\pm 1, \\pm 2$).", correct: true, fb: "Penemuan pola yang tajam! Itulah inti dari Teorema Akar Rasional." },
+            { text: "Semua akarnya berasal dari koefisien suku tengah $-8$.", correct: false, fb: "Coba kalikan konstanta tiap faktor linear: $(1)(1)(-3) = -3$ (konstanta ujung) dan $(2)(1)(1) = 2$ (koefisien utama)." }
+          ],
+          hornerLab: {
+            coeffs: coeffs,
+            defaultK: 3,
+            candidateKs: [-3, -1, 1, 3],
+            prompt: `Kandidat akar bulat dari faktor $-3$ adalah $\\pm 1, \\pm 3$. Gunakan Horner di bawah untuk menguji kandidat tersebut pada $P(x) = ${polyLatex}$!`
+          },
+          processingPrompt: `Dari pengujian kandidat akar bulat $\\{\\pm 1, \\pm 3\\}$ pada $P(x) = ${polyLatex}$, berapakah nilai $k$ bulat positif yang menghasilkan sisa $0$?`,
+          processingAnswer: 3,
+          verificationClaim: `Mengapa angka $x = 2$ TIDAK PERLU kita uji sebagai kandidat akar dari $P(x) = 2x^3 - 3x^2 - 8x - 3$?`,
+          verificationOptions: [
+            { text: "Karena $2$ bukan faktor dari konstanta $a_0 = -3$ (faktor bulat dari $-3$ hanya $\\pm 1$ dan $\\pm 3$).", correct: true, fb: "Efisien sekali! Dengan Uji Akar Rasional, kita langsung mengeliminasi angka yang bukan faktor konstanta." },
+            { text: "Karena bilangan genap tidak pernah menjadi akar suku banyak.", correct: false, fb: "Bilangan genap bisa saja menjadi akar jika konstantanya genap. Di sini konstantanya $-3$ (ganjil)." }
+          ],
+          generalizationCloze: {
+            sentence: "Teorema Akar Rasional: Setiap kandidat akar rasional berbentuk $\\frac{p}{q}$ memenuhi $p$ adalah faktor dari ___ dan $q$ adalah faktor dari ___.",
+            options: [
+              { text: "konstanta ($a_0$) dan koefisien utama ($a_n$)", correct: true },
+              { text: "koefisien utama ($a_n$) dan derajat ($n$)", correct: false },
+              { text: "suku tengah dan sisa pembagian", correct: false }
+            ]
+          },
+          misconceptionCase: {
+            title: "Kasus Kekeliruan Umum #4: Mengira Semua Polinomial Derajat 3 Punya Akar Rasional",
+            story: "Farhan mencoba memfaktorkan $P(x) = x^3 + x - 3$. Kandidat akar rasionalnya hanya $\\pm 1$ dan $\\pm 3$. Setelah dihitung: $P(1) = -1$, $P(-1) = -5$, $P(3) = 27$, $P(-3) = -33$. Farhan bingung dan mengira soalnya salah cetak.",
+            question: "Kesimpulan matematis apa yang benar mengenai $P(x) = x^3 + x - 3$?",
+            tag: "asumsi_akar_rasional",
+            options: [
+              { text: "Tidak semua polinomial berderajat 3 memiliki akar rasional. Karena semua kandidat $\\frac{p}{q}$ menghasilkan sisa $\\neq 0$, maka $P(x)$ tidak punya akar rasional (akar realnya irasional).", correct: true, fb: "Pemahaman konsep tingkat lanjut yang luar biasa! Polinomial berderajat 3 pasti punya minimal 1 akar real, tetapi akar tersebut bisa berupa bilangan irasional." },
+              { text: "Farhan harus mencoba angka $k = 2$ dan $k = 4$ sampai ketemu nol.", correct: false, fb: "Berdasarkan Teorema Akar Rasional, jika $2$ dan $4$ bukan faktor dari $-3$, keduanya mustahil menghasilkan nol." }
+            ]
+          },
+          questions: generateZoneQuestions(4)
+        };
+      }
+
+      if (zoneId === 5) {
+        // Zona 5: Menara Pemfaktoran Lengkap
+        const coeffs = [1, -2, -5, 6]; // (x - 1)(x + 2)(x - 3)
+        const polyLatex = PolyEngine.toLatex(coeffs);
+
+        return {
+          zoneId: 5,
+          goalOptions: [
+            "Aku ingin mampu memfaktorkan suku banyak berderajat 3 secara tuntas menjadi faktor-faktor linear.",
+            "Aku ingin mengenali kapan hasil bagi kuadrat masih bisa difaktorkan atau sudah definit ($\Delta < 0$).",
+            "Aku ingin teliti menyusun urutan langkah pemfaktoran dari awal hingga akhir."
+          ],
+          stimulation: `Puncak <strong>Menara Pemfaktoran</strong> sudah terlihat! Untuk membuka segel menara, kita tidak cukup hanya menemukan satu akar dari $P(x) = ${polyLatex}$, melainkan harus memecahnya secara lengkap menjadi perkalian faktor-faktor linear $(x - r_1)(x - r_2)(x - r_3)$!`,
+          problemQuestion: "Setelah kita menemukan satu faktor pertama $(x - 1)$ dari $P(x) = x^3 - 2x^2 - 5x + 6$ menggunakan Horner, langkah apa yang paling efisien untuk mencari dua faktor lainnya?",
+          problemChoices: [
+            { text: "Mengambil koefisien hasil bagi Horner yang sudah turun menjadi derajat 2 (kuadrat), lalu memfaktorkan bentuk kuadrat tersebut.", correct: true, fb: "Strategi jitu! Begitu derajatnya turun menjadi kuadrat, kita langsung bisa memfaktorkannya dengan mudah." },
+            { text: "Mengalikan kembali $(x - 1)$ dengan $P(x)$ sehingga menjadi derajat 4.", correct: false, fb: "Mengalikannya justru menaikkan derajat. Tujuan kita adalah menurunkan derajat polinomial." }
+          ],
+          hornerLab: {
+            coeffs: coeffs,
+            defaultK: 1,
+            candidateKs: [-2, 1, 3],
+            prompt: `Jalankan Horner untuk $P(x) = ${polyLatex}$ dengan $k = 1$. Perhatikan tiga angka pertama di baris bawah: $[1, -1, -6]$ yang mewakili hasil bagi kuadrat $H(x) = x^2 - x - 6$!`
+          },
+          processingPrompt: `Hasil bagi Horner oleh $(x - 1)$ adalah $H(x) = x^2 - x - 6 = (x - 3)(x + 2)$. Berapakah jumlah ketiga akar dari $P(x) = x^3 - 2x^2 - 5x + 6 = 0$ (yaitu $1 + 3 + (-2)$)?`,
+          processingAnswer: 2,
+          verificationClaim: `Bagaimana jika setelah dibagi Horner, hasil bagi kuadratnya adalah $H(x) = x^2 + x + 2$ yang memiliki diskriminan $\\Delta = 1^2 - 4(1)(2) = -7 < 0$?`,
+          verificationOptions: [
+            { text: "Bentuk kuadrat $x^2 + x + 2$ tidak dapat difaktorkan lagi atas bilangan real, sehingga pemfaktoran real berhenti sampai bentuk tersebut.", correct: true, fb: "Tepat sekali! Jika $\\Delta < 0$, faktor kuadrat tersebut bersifat definit dan tidak punya akar real." },
+            { text: "Tetap dipaksakan difaktorkan menjadi $(x + 1)(x + 2)$.", correct: false, fb: "Hati-hati! $(x+1)(x+2) = x^2 + 3x + 2 \\neq x^2 + x + 2$." }
+          ],
+          generalizationCloze: {
+            sentence: "Pemfaktoran lengkap polinomial berderajat 3 dilakukan dengan mencari satu akar $k$ via ___, mengambil hasil bagi berderajat ___, lalu memfaktorkannya jika diskriminannya $\\Delta \\ge 0$.",
+            options: [
+              { text: "Teorema Faktor/Horner dan berderajat 2 (kuadrat)", correct: true },
+              { text: "Teorema Sisa dan berderajat 4", correct: false },
+              { text: "Perkalian silang dan berderajat 3", correct: false }
+            ]
+          },
+          misconceptionCase: {
+            title: "Kasus Kekeliruan Umum #5: Berhenti Sebelum Faktor Kuadrat Difaktorkan Tuntas",
+            story: "Putri memfaktorkan $P(x) = x^3 - 4x^2 + x + 6$. Setelah Horner dengan $k = -1$, ia mendapatkan $P(x) = (x + 1)(x^2 - 5x + 6)$ dan menyatakan tidak ada lagi faktor linear lainnya.",
+            question: "Apa yang terlewat oleh Putri?",
+            tag: "faktor_kuadrat_terlewat",
+            options: [
+              { text: "Faktor kuadrat $(x^2 - 5x + 6)$ masih memiliki $\\Delta > 0$ dan dapat difaktorkan lagi menjadi $(x - 2)(x - 3)$, sehingga faktor lengkapnya $(x + 1)(x - 2)(x - 3)$.", correct: true, fb: "Ketelitian yang hebat! Selalu periksa apakah faktor kuadrat hasil Horner masih bisa dipecah lagi." },
+              { text: "Putri salah menulis tanda $(x + 1)$ untuk akar $k = -1$.", correct: false, fb: "Untuk $k = -1$, faktornya memang $(x - (-1)) = (x + 1)$. Yang terlewat adalah pemfaktoran lanjutan dari $x^2 - 5x + 6$." }
+            ]
+          },
+          questions: generateZoneQuestions(5)
+        };
+      }
+
+      // Zona 6: Kota Masalah Nyata (Kontekstual Gorontalo & HOTS)
+      const coeffs6 = [1, -6, 11, -6]; // (x-1)(x-2)(x-3)
+      const polyLatex6 = PolyEngine.toLatex(coeffs6);
+
+      return {
+        zoneId: 6,
+        goalOptions: [
+          "Aku ingin terampil menentukan nilai parameter yang belum diketahui menggunakan Teorema Faktor.",
+          "Aku ingin menerapkan pemfaktoran polinomial pada masalah volume kemasan Karawo dan titik impas usaha.",
+          "Aku ingin menguasai penalaran cepat seperti sifat jumlah koefisien $P(1) = 0$."
+        ],
+        stimulation: `Selamat datang di <strong>Kota Masalah Nyata Gorontalo</strong>! Di sini, para pengrajin sulaman <strong>Karawo</strong> dan wirausahawan muda menggunakan model polinomial untuk merancang ukuran kotak kemasan $V(x) = ${polyLatex6}$ serta menghitung titik impas produksi. Kunci terakhir Brankas Otanaha ada di zona ini!`,
+        problemQuestion: "Sebelum menghitung panjang lebar: perhatikan polinomial $P(x) = x^3 - 6x^2 + 11x - 6$. Jumlahkan seluruh koefisiennya: $1 + (-6) + 11 + (-6) = 0$. Mengapa fakta ini langsung membuktikan bahwa $(x - 1)$ adalah faktor dari $P(x)$ tanpa perlu membagi?",
+        problemChoices: [
+          { text: "Karena untuk $x = 1$, nilai $1^n = 1$, sehingga $P(1)$ persis sama dengan jumlah seluruh koefisiennya. Karena jumlahnya $0$, maka $P(1) = 0$ dan menurut Teorema Faktor $(x - 1)$ adalah faktor!", correct: true, fb: "Penalaran HOTS yang luar biasa! Sifat $P(1) = \\text{jumlah koefisien}$ adalah senjata rahasia matematika yang sangat hemat waktu." },
+          { text: "Karena semua polinomial berderajat 3 selalu mempunyai faktor $(x - 1)$.", correct: false, fb: "Hanya polinomial yang jumlah seluruh koefisiennya sama dengan $0$ yang memiliki faktor $(x - 1)$." }
+        ],
+        hornerLab: {
+          coeffs: coeffs6,
+          defaultK: 1,
+          candidateKs: [1, 2, 3, 4],
+          prompt: `Mari buktikan pada simulator Horner untuk $V(x) = ${polyLatex6}$! Uji $k = 1, 2, 3$ sebagai pembuat nol fungsi model kotak kemasan.`
+        },
+        processingPrompt: `Jika sebuah polinomial $P(x) = 2x^3 + mx^2 - 5x + 2$ diketahui memiliki faktor $(x - 1)$, maka menurut sifat $P(1) = 0$ berlaku $2 + m - 5 + 2 = 0$. Berapakah nilai parameter $m$?`,
+        processingAnswer: 1,
+        verificationClaim: `Dalam masalah kontekstual volume kotak kemasan kain Karawo $V(x) = x(x - 2)(x + 5)$, jika $x$ menyatakan panjang rusuk dalam satuan cm, apakah semua akar polinomial memenuhi sebagai ukuran fisik kotak?`,
+        verificationOptions: [
+          { text: "Tidak semua; ukuran panjang rusuk fisik harus bernilai positif sehingga kita harus memilih domain $x > 2$ agar setiap dimensi $(x)$, $(x-2)$, dan $(x+5)$ bernilai positif.", correct: true, fb: "Sangat kontekstual dan bernalar! Dalam masalah nyata, solusi matematis harus diuji kembali terhadap syarat fisik (panjang $> 0$)." },
+          { text: "Ya, nilai $x = -5$ cm tetap bisa dipakai sebagai ukuran panjang kotak.", correct: false, fb: "Dalam dunia nyata, ukuran panjang benda fisik tidak mungkin bernilai negatif." }
+        ],
+        generalizationCloze: {
+          sentence: "Dalam menyelesaikan masalah polinomial kontekstual dan parameter: jika $(x - a)$ faktor dari $P(x)$, kita substitusikan ___ untuk mencari parameter, dan jika jumlah semua koefisien $P(x)$ bernilai $0$, maka ___ pasti merupakan faktornya.",
+          options: [
+            { text: "$P(a) = 0$ dan $(x - 1)$", correct: true },
+            { text: "$P(0) = a$ dan $(x + 1)$", correct: false },
+            { text: "$P(-a) = 1$ dan $x^2$", correct: false }
+          ]
+        },
+        misconceptionCase: {
+          title: "Kasus Kekeliruan Umum #6: Salah Substitusi Tanda saat Mencari Parameter",
+          story: "Diketahui $(x + 2)$ adalah faktor dari $P(x) = x^3 + kx^2 - 4x - 8$. Andi mencari nilai $k$ dengan menulis $P(2) = 0 \\implies 8 + 4k - 8 - 8 = 0 \\implies k = 2$.",
+          question: "Perbaiki langkah Andi agar memperoleh nilai parameter $k$ yang benar!",
+          tag: "tanda_terbalik",
+          options: [
+            { text: "Karena faktornya $(x + 2)$, seharusnya $P(-2) = 0 \\implies (-2)^3 + k(-2)^2 - 4(-2) - 8 = 0 \\implies -8 + 4k + 8 - 8 = 0 \\implies k = 2$. Meski kebetulan hasil akhirnya sama, proses substitusi $P(2)=0$ salah konsep!", correct: true, fb: "Analisis tingkat tinggi! Dalam matematika, kebenaran konsep jauh lebih penting daripada kebetulan angka akhir. Untuk $(x+2)$, wajib gunakan $P(-2)=0$." },
+            { text: "Seharusnya Andi menggunakan $P(0) = 2$.", correct: false, fb: "Pembuat nol dari $(x + 2)$ adalah $x = -2$, sehingga syarat Teorema Faktornya adalah $P(-2) = 0$." }
+          ]
+        },
+        questions: generateZoneQuestions(6)
+      };
+    }
+
+    /*************************************************************************
+     * 9. GENERATOR SOAL BERJENJANG (LOTS -> MOTS -> HOTS) DENGAN MESIN POLINOMIAL
+     *************************************************************************/
+    function generateZoneQuestions(zoneId) {
+      if (zoneId === 1) {
+        // Soal 1 (LOTS): Evaluasi P(k)
+        const rA = [1, 2, -1][Math.floor(Math.random() * 3)];
+        const coeffs1 = [1, 2, -3, 4];
+        const val1 = PolyEngine.evalPoly(coeffs1, rA);
+        return [
+          {
+            no: 1,
+            level: "LOTS",
+            type: "mcq",
+            prompt: `Diketahui suku banyak $P(x) = x^3 + 2x^2 - 3x + 4$. Berapakah nilai suku banyak untuk $x = ${rA}$ (yaitu $P(${rA})$)?`,
+            hints: [
+              "Isyarat: Gantikan setiap variabel $x$ pada $P(x)$ dengan angka $" + rA + "$.",
+              "Langkah Awal: Hitung $(" + rA + ")^3 + 2(" + rA + ")^2 - 3(" + rA + ") + 4$ dengan memperhatikan tanda pangkat.",
+              "Contoh Serupa: Untuk $Q(x) = x^3 - 2x + 1$ pada $x = 2$, nilainya $2^3 - 2(2) + 1 = 5$."
+            ],
+            options: [
+              { text: `$${val1}$`, correct: true, tag: "", fb: `Benar! Substitusi $P(${rA})$ menghasilkan $${val1}$ dengan tepat.` },
+              { text: `$${PolyEngine.evalPoly(coeffs1, -rA)}$`, correct: false, tag: "tanda_terbalik", fb: `Kamu belum tepat karena menghitung untuk $x = ${-rA}$. Perhatikan kembali tanda $x = ${rA}$ ya!` },
+              { text: `$${val1 + 4}$`, correct: false, tag: "hitung_aritmetika", fb: `Hampir tepat! Coba periksa kembali penjumlahan suku terakhirnya.` },
+              { text: `$${val1 - 3}$`, correct: false, tag: "hitung_aritmetika", fb: `Belum tepat. Ayo cek kembali perkalian $-3(${rA})$!` }
+            ]
+          },
+          {
+            no: 2,
+            level: "MOTS",
+            type: "mcq",
+            prompt: `Jika suku banyak $P(x) = 2x^4 - 5x^2 + 3x - 7$ akan dibagi dengan $(x - 2)$ menggunakan bagan Horner, manakah urutan baris koefisien atas yang benar?`,
+            hints: [
+              "Isyarat: Perhatikan derajat tertinggi $P(x)$ adalah $4$, jadi pangkatnya harus urut dari $x^4, x^3, x^2, x^1, x^0$.",
+              "Langkah Awal: Cek pangkat mana yang tidak tampak tertulis di antara $2x^4$ dan $-5x^2$.",
+              "Contoh Serupa: Polinomial $x^3 - 4x + 1$ memiliki baris koefisien `[1, 0, -4, 1]` karena koefisien $x^2$ adalah $0$."
+            ],
+            options: [
+              { text: "`[2, 0, -5, 3, -7]` karena koefisien suku $x^3$ adalah $0$.", correct: true, tag: "", fb: "Luar biasa teliti! Suku $x^3$ tidak tertulis sehingga wajib diwakili angka $0$." },
+              { text: "`[2, -5, 3, -7]` sesuai angka yang terlihat saja.", correct: false, tag: "suku_nol_hilang", fb: "Kamu belum menyertakan koefisien $0$ untuk suku $x^3$ yang hilang. Ingat, pangkat harus berurutan!" },
+              { text: "`[2, -5, 0, 3, -7]` karena angka $0$ ditaruh di tengah.", correct: false, tag: "suku_nol_hilang", fb: "Posisi angka $0$ belum tepat. Yang tidak tertulis adalah suku $x^3$ (tepat setelah $2x^4$)." },
+              { text: "`[-7, 3, -5, 0, 2]` diurutkan dari konstanta.", correct: false, tag: "urutan_koefisien", fb: "Pada skema Horner, koefisien diurutkan dari pangkat tertinggi ke terendah (kiri ke kanan)." }
+            ]
+          },
+          {
+            no: 3,
+            level: "HOTS",
+            type: "mcq",
+            prompt: `Pada suatu bagan Horner pembagian $P(x)$ oleh $(x - 3)$, diperoleh baris bawah `[1, 4, 2, 0]`, di mana angka terakhir $0$ adalah sisa. Manakah hasil bagi $H(x)$ beserta alasan derajatnya yang benar?`,
+            hints: [
+              "Isyarat: Tiga angka pertama `[1, 4, 2]` merupakan koefisien hasil bagi $H(x)$.",
+              "Langkah Awal: Jika ada 3 koefisien pada hasil bagi `[1, 4, 2]`, maka derajat hasil baginya adalah $3 - 1 = 2$ (bentuk kuadrat).",
+              "Contoh Serupa: Baris hasil bagi `[2, -1, 5]` mewakili $2x^2 - x + 5$."
+            ],
+            options: [
+              { text: "$H(x) = x^2 + 4x + 2$, karena $P(x)$ berderajat 3 dibagi bentuk linear berderajat 1 menghasilkan derajat $3 - 1 = 2$.", correct: true, tag: "", fb: "Penalaran yang sangat matang! Kamu memahami makna setiap angka pada baris bawah Horner." },
+              { text: "$H(x) = x^3 + 4x^2 + 2x$, karena dimulai dari pangkat 3.", correct: false, tag: "derajat_hasil_bagi", fb: "Ingat, setelah dibagi oleh $(x - 3)$, derajat hasil bagi turun 1 tingkat menjadi derajat 2." },
+              { text: "$H(x) = x^2 - 4x + 2$, karena tandanya harus dibalik.", correct: false, tag: "tanda_terbalik", fb: "Koefisien hasil bagi di baris bawah Horner langsung dipakai sesuai tandanya tanpa dibalik." }
+            ]
+          }
+        ];
+      }
+
+      if (zoneId === 2) {
+        const k = 2;
+        const coeffs = [1, -3, 1, 5]; // P(2) = 8 - 12 + 2 + 5 = 3
+        const ans = PolyEngine.evalPoly(coeffs, k);
+        return [
+          {
+            no: 1,
+            level: "LOTS",
+            type: "mcq",
+            prompt: `Berdasarkan Teorema Sisa, berapakah sisa pembagian suku banyak $P(x) = x^3 - 3x^2 + x + 5$ jika dibagi oleh $(x - 2)$?`,
+            hints: [
+              "Isyarat: Menurut Teorema Sisa, sisa pembagian $P(x)$ oleh $(x - 2)$ adalah $S = P(2)$.",
+              "Langkah Awal: Hitung $P(2) = (2)^3 - 3(2)^2 + 2 + 5$.",
+              "Contoh Serupa: Sisa pembagian $x^2 - 4x + 7$ oleh $(x - 3)$ adalah $3^2 - 4(3) + 7 = 4$."
+            ],
+            options: [
+              { text: `$${ans}$`, correct: true, tag: "", fb: `Tepat! $P(2) = 8 - 12 + 2 + 5 = ${ans}$.` },
+              { text: `$${PolyEngine.evalPoly(coeffs, -2)}$`, correct: false, tag: "tanda_terbalik", fb: `Kamu menghitung $P(-2) = -17$. Karena pembaginya $(x - 2)$, gunakan $x = 2$ ya!` },
+              { text: `$0$`, correct: false, tag: "hitung_aritmetika", fb: `Belum tepat. Coba hitung ulang $8 - 12 + 2 + 5$.` },
+              { text: `$7$`, correct: false, tag: "hitung_aritmetika", fb: `Hampir! Perhatikan tanda negatif pada $-3(2)^2 = -12$.` }
+            ]
+          },
+          {
+            no: 2,
+            level: "MOTS",
+            type: "mcq",
+            prompt: `Suku banyak $P(x) = 2x^3 + 5x^2 - x - 6$ dibagi oleh $(2x - 1)$. Manakah langkah penentuan sisa dan hasilnya yang tepat?`,
+            hints: [
+              "Isyarat: Untuk pembagi $(ax - b)$, cari pembuat nolnya terlebih dahulu: $2x - 1 = 0$.",
+              "Langkah Awal: Dari $2x - 1 = 0$ diperoleh $x = \\frac{1}{2}$. Maka sisanya adalah $P\\left(\\frac{1}{2}\\right)$.",
+              "Contoh Serupa: Jika dibagi $(3x + 1)$, sisanya adalah $P\\left(-\\frac{1}{3}\\right)$."
+            ],
+            options: [
+              { text: `Menghitung $P\\left(\\frac{1}{2}\\right) = 2\\left(\\frac{1}{8}\\right) + 5\\left(\\frac{1}{4}\\right) - \\frac{1}{2} - 6 = -5$.`, correct: true, tag: "", fb: "Hebat! Kamu terampil menentukan sisa untuk pembagi berbentuk $(ax - b)$." },
+              { text: `Menghitung $P\\left(-\\frac{1}{2}\\right) = -4$.`, correct: false, tag: "tanda_terbalik", fb: "Perhatikan tanda pembagi $(2x - 1) = 0 \\implies x = +\\frac{1}{2}$, bukan $-\\frac{1}{2}$." },
+              { text: `Menghitung $P(1) = 0$.`, correct: false, tag: "koefisien_pembagi", fb: "Jangan lupakan koefisien $2$ pada $2x - 1 = 0 \\implies x = \\frac{1}{2}$." }
+            ]
+          },
+          {
+            no: 3,
+            level: "HOTS",
+            type: "mcq",
+            prompt: `Jika suku banyak $P(x) = x^3 + ax^2 - 2x + 1$ dibagi oleh $(x + 2)$ memberikan sisa $5$, berapakah nilai $a$ beserta alasan matematisnya?`,
+            hints: [
+              "Isyarat: Pembaginya adalah $(x + 2)$, artinya pembuat nol pembagi adalah $x = -2$.",
+              "Langkah Awal: Berdasarkan Teorema Sisa, $P(-2) = 5$. Substitusikan $x = -2$ ke $P(x)$.",
+              "Contoh Serupa: $(-2)^3 + a(-2)^2 - 2(-2) + 1 = 5 \\implies -8 + 4a + 4 + 1 = 5$."
+            ],
+            options: [
+              { text: "$a = 2$, karena dari syarat $P(-2) = 5$ diperoleh $-8 + 4a + 4 + 1 = 5 \\implies 4a = 8$.", correct: true, tag: "", fb: "Sempurna! Baik jawaban maupun alur penalaranmu sangat akurat." },
+              { text: "$a = 0$, karena menggunakan $P(2) = 5 \\implies 8 + 4a - 4 + 1 = 5$.", correct: false, tag: "tanda_terbalik", fb: "Kamu menggunakan $P(2) = 5$, padahal pembaginya $(x + 2)$ sehingga seharusnya $P(-2) = 5$." },
+              { text: "$a = -2$, karena $-4a = 8$.", correct: false, tag: "hitung_aritmetika", fb: "Ingat bahwa $(-2)^2 = +4$ (positif), sehingga menjadi $+4a$, bukan $-4a$." }
+            ]
+          }
+        ];
+      }
+
+      if (zoneId === 3) {
+        return [
+          {
+            no: 1,
+            level: "LOTS",
+            type: "mcq",
+            prompt: `Manakah di antara bentuk linear berikut yang merupakan <strong>faktor</strong> dari $P(x) = x^3 - 4x^2 + x + 6$?`,
+            hints: [
+              "Isyarat: $(x - k)$ adalah faktor dari $P(x)$ jika dan hanya jika $P(k) = 0$.",
+              "Langkah Awal: Uji nilai $k = -1$: $P(-1) = (-1)^3 - 4(-1)^2 + (-1) + 6$.",
+              "Contoh Serupa: Jika $P(-1) = -1 - 4 - 1 + 6 = 0$, maka faktornya adalah $(x - (-1)) = (x + 1)$."
+            ],
+            options: [
+              { text: "$(x + 1)$, karena $P(-1) = (-1)^3 - 4(-1)^2 + (-1) + 6 = 0$.", correct: true, tag: "", fb: "Benar! Karena $P(-1) = 0$, maka $(x + 1)$ adalah faktor dari $P(x)$." },
+              { text: "$(x - 1)$, karena $P(1) = 1 - 4 + 1 + 6 = 4$.", correct: false, tag: "sisa_bukan_nol", fb: "Karena $P(1) = 4 \\neq 0$, maka $(x - 1)$ belum menjadi faktor dari $P(x)$." },
+              { text: "$(x - 1)$, karena $P(-1) = 0$.", correct: false, tag: "tanda_terbalik", fb: "Hati-hati! Jika $P(-1) = 0$, maka faktornya adalah $(x - (-1)) = (x + 1)$, bukan $(x - 1)$." }
+            ]
+          },
+          {
+            no: 2,
+            level: "MOTS",
+            type: "mcq",
+            prompt: `Diketahui $P(x) = x^3 - 3x^2 - 4x + 12$. Manakah pasangan faktor linear yang KEDUANYA merupakan faktor dari $P(x)$?`,
+            hints: [
+              "Isyarat: Uji pembuat nol masing-masing faktor ke dalam $P(x)$ hingga menghasilkan $0$.",
+              "Langkah Awal: Coba hitung $P(2) = 8 - 12 - 8 + 12$ dan $P(-2) = -8 - 12 + 8 + 12$.",
+              "Contoh Serupa: Jika $P(2)=0$ dan $P(-2)=0$, maka $(x-2)$ dan $(x+2)$ keduanya adalah faktor."
+            ],
+            options: [
+              { text: "$(x - 2)$ dan $(x + 2)$, karena $P(2) = 0$ dan $P(-2) = 0$.", correct: true, tag: "", fb: "Mantap! Kedua nilai membuat $P(x)$ bernilai $0$, bahkan faktor ketiganya adalah $(x - 3)$." },
+              { text: "$(x - 1)$ dan $(x + 1)$.", correct: false, tag: "sisa_bukan_nol", fb: "Jika dihitung, $P(1) = 6 \\neq 0$ dan $P(-1) = 12 \\neq 0$." },
+              { text: "$(x + 3)$ dan $(x - 4)$.", correct: false, tag: "tanda_terbalik", fb: "Untuk $x = -3$, nilai $P(-3) = -30 \\neq 0$. Coba periksa kembali tanda akarnya!" }
+            ]
+          },
+          {
+            no: 3,
+            level: "HOTS",
+            type: "mcq",
+            prompt: `Diketahui suku banyak $P(x)$ habis dibagi oleh $(x - 3)$ dan memberikan sisa $4$ jika dibagi $(x - 1)$. Manakah pernyataan yang PASTI BENAR mengenai grafik dan nilai $P(x)$?`,
+            hints: [
+              "Isyarat: 'Habis dibagi $(x - 3)$' berarti $(x - 3)$ adalah faktor dari $P(x)$.",
+              "Langkah Awal: Jika $(x - 3)$ faktor, maka $P(3) = 0$, yang artinya grafik $y = P(x)$ memotong sumbu-$x$ di titik $(3, 0)$.",
+              "Contoh Serupa: Sisa $4$ oleh $(x - 1)$ berarti $P(1) = 4$ (melalui titik $(1, 4)$)."
+            ],
+            options: [
+              { text: "$P(3) = 0$ dan $P(1) = 4$, sehingga grafik $y = P(x)$ memotong sumbu-$x$ di $(3, 0)$ dan melalui titik $(1, 4)$.", correct: true, tag: "", fb: "Koneksi konsep aljabar dan geometri yang sangat cerdas! Akar real $P(k)=0$ adalah titik potong kurva pada sumbu-$x$." },
+              { text: "$P(-3) = 0$ dan $P(-1) = 4$.", correct: false, tag: "tanda_terbalik", fb: "Perhatikan tanda pada $(x - 3)$ dan $(x - 1)$: pembuat nolnya adalah $x = 3$ dan $x = 1$." },
+              { text: "$P(3) = 4$ dan $P(1) = 0$.", correct: false, tag: "konsep_terbalik", fb: "Jangan tertukar: yang habis membagi adalah $(x - 3)$ sehingga $P(3) = 0$." }
+            ]
+          }
+        ];
+      }
+
+      if (zoneId === 4) {
+        return [
+          {
+            no: 1,
+            level: "LOTS",
+            type: "mcq",
+            prompt: `Manakah daftar lengkap seluruh kandidat akar rasional bulat dari suku banyak $P(x) = x^3 - 4x^2 + x + 6 = 0$?`,
+            hints: [
+              "Isyarat: Karena koefisien utama $a_3 = 1$, maka kandidat akar rasionalnya adalah seluruh faktor bulat positif dan negatif dari konstanta $a_0 = 6$.",
+              "Langkah Awal: Sebutkan semua bilangan bulat yang membagi habis $6$.",
+              "Contoh Serupa: Faktor bulat dari $4$ adalah $\\pm 1, \\pm 2, \\pm 4$."
+            ],
+            options: [
+              { text: "$\\{\\pm 1, \\pm 2, \\pm 3, \\pm 6\\}$", correct: true, tag: "", fb: "Tepat! Semua pembagi bulat dari konstanta $6$ adalah kandidat akarnya." },
+              { text: "$\\{1, 2, 3, 6\\}$ saja tanpa bilangan negatif.", correct: false, tag: "lupa_akar_negatif", fb: "Jangan lupakan faktor bulat negatif ($-1, -2, -3, -6$) karena bilangan negatif juga membagi habis $6$!" },
+              { text: "$\\{\\pm 1, \\pm 4, \\pm 6\\}$ diambil dari koefisien yang tertulis.", correct: false, tag: "kandidat_akar_keliru", fb: "Kandidat akar diambil dari faktor-faktor konstanta ujung ($6$), bukan menyalin koefisien tengah." }
+            ]
+          },
+          {
+            no: 2,
+            level: "MOTS",
+            type: "mcq",
+            prompt: `Diberikan persamaan $2x^3 - 3x^2 - 11x + 6 = 0$. Manakah di antara bilangan pecahan berikut yang merupakan <strong>akar rasional</strong> dari persamaan tersebut?`,
+            hints: [
+              "Isyarat: Kandidat pecahan $\\frac{p}{q}$ memiliki penyebut $q = 2$ (faktor dari koefisien utama $2$) dan pembilang $p \\in \\{\\pm 1, \\pm 3\\}$.",
+              "Langkah Awal: Uji $x = \\frac{1}{2}$ ke dalam $2x^3 - 3x^2 - 11x + 6$.",
+              "Contoh Serupa: $2(\\frac{1}{8}) - 3(\\frac{1}{4}) - 11(\\frac{1}{2}) + 6 = \\frac{1}{4} - \\frac{3}{4} - \\frac{11}{2} + 6 = -\\frac{1}{2} - 5,5 + 6 = 0$."
+            ],
+            options: [
+              { text: "$x = \\frac{1}{2}$, karena memenuhi syarat $\\frac{\\text{faktor } 6}{\\text{faktor } 2}$ dan menghasilkan $P\\left(\\frac{1}{2}\\right) = 0$.", correct: true, tag: "", fb: "Luar biasa! Kamu berhasil menemukan akar rasional pecahan dengan sangat cermat." },
+              { text: "$x = \\frac{2}{5}$, karena $2$ dan $5$ bilangan prima.", correct: false, tag: "kandidat_akar_keliru", fb: "Penyebut $5$ bukan faktor dari koefisien utama $2$, sehingga $\\frac{2}{5}$ tidak mungkin menjadi akar." },
+              { text: "$x = -\\frac{1}{2}$, karena menghasilkan $0$.", correct: false, tag: "tanda_terbalik", fb: "Jika dihitung, $P(-\\frac{1}{2}) = -\\frac{1}{4} - \\frac{3}{4} + \\frac{11}{2} + 6 = 10,5 \\neq 0$." }
+            ]
+          },
+          {
+            no: 3,
+            level: "HOTS",
+            type: "mcq",
+            prompt: `Seorang siswa ingin mencari akar rasional dari $P(x) = 3x^3 - 2x^2 + 5x - 4 = 0$. Mengapa strategi menguji $x = 1$ terlebih dahulu sangat dianjurkan sebelum menguji pecahan seperti $x = \\frac{4}{3}$?`,
+            hints: [
+              "Isyarat: Bandingkan kemudahan menghitung $P(1)$ dengan menghitung pangkat tiga dari pecahan.",
+              "Langkah Awal: Ingat bahwa $P(1)$ hanya menjumlahkan koefisien: $3 - 2 + 5 - 4$.",
+              "Contoh Serupa: Menguji $\\pm 1$ adalah langkah paling hemat waktu dalam Uji Akar Rasional."
+            ],
+            options: [
+              { text: "Karena $x = 1$ selalu menjadi kandidat akar (sebab $1$ membagi semua bilangan bulat) dan $P(1)$ cukup dihitung dengan menjumlahkan seluruh koefisien tanpa perpangkatan rumit.", correct: true, tag: "", fb: "Strategi metakognitif yang cerdas! Menguji $x = \\pm 1$ terlebih dahulu adalah kebiasaan matematikawan yang efisien." },
+              { text: "Karena pecahan tidak pernah menjadi akar polinomial.", correct: false, tag: "kandidat_akar_keliru", fb: "Pecahan tetap bisa menjadi akar jika koefisien utamanya lebih dari 1." }
+            ]
+          }
+        ];
+      }
+
+      if (zoneId === 5) {
+        return [
+          {
+            no: 1,
+            level: "LOTS",
+            type: "reorder",
+            prompt: `Susunlah 4 langkah pemfaktoran lengkap suku banyak $P(x) = x^3 - 2x^2 - 5x + 6$ di bawah ini menjadi urutan prosedur yang logis (gunakan tombol ⬆️ / ⬇️):`,
+            hints: [
+              "Isyarat: Mulailah dari mendaftar kandidat akar konstanta, lalu uji satu akar hingga $P(k)=0$.",
+              "Langkah Awal: Setelah dapat satu akar $x = 1$, gunakan Horner untuk menurunkan derajat menjadi kuadrat.",
+              "Contoh Serupa: Akhiri dengan memfaktorkan hasil bagi kuadrat dan menuliskan ketiga faktor linearnya."
+            ],
+            items: [
+              { id: "s1", text: "1. Menentukan kandidat akar dari faktor konstanta $6$ dan menemukan bahwa $P(1) = 0$, sehingga $(x - 1)$ adalah faktor pertama." },
+              { id: "s2", text: "2. Membagi $P(x)$ dengan $(x - 1)$ menggunakan skema Horner sehingga diperoleh hasil bagi kuadrat $H(x) = x^2 - x - 6$." },
+              { id: "s3", text: "3. Memfaktorkan bentuk kuadrat $x^2 - x - 6$ menjadi $(x - 3)(x + 2)$." },
+              { id: "s4", text: "4. Menuliskan pemfaktoran lengkap $P(x) = (x - 1)(x - 3)(x + 2)$." }
+            ],
+            correctOrder: ["s1", "s2", "s3", "s4"]
+          },
+          {
+            no: 2,
+            level: "MOTS",
+            type: "mcq",
+            prompt: `Faktorkan secara lengkap suku banyak $P(x) = x^3 - 3x + 2$! (Petunjuk: perhatikan adanya akar kembar dan jangan lupakan koefisien $0$ untuk suku $x^2$).`,
+            hints: [
+              "Isyarat: Cek jumlah koefisien: $1 + 0 - 3 + 2 = 0$, berarti $P(1) = 0$ dan $(x - 1)$ adalah faktor!",
+              "Langkah Awal: Bagi `[1, 0, -3, 2]` dengan $k = 1$ memakai Horner, diperoleh hasil bagi $x^2 + x - 2$.",
+              "Contoh Serupa: Faktorkan $x^2 + x - 2 = (x - 1)(x + 2)$, lalu gabungkan dengan $(x - 1)$ pertama."
+            ],
+            options: [
+              { text: "$P(x) = (x - 1)^2 (x + 2)$", correct: true, tag: "", fb: "Luar biasa! Kamu berhasil menemukan faktor berulang (akar kembar $x = 1$) dengan sangat teliti." },
+              { text: "$P(x) = (x - 1)(x^2 + x - 2)$ dan tidak bisa difaktorkan lagi.", correct: false, tag: "faktor_kuadrat_terlewat", fb: "Hampir selesai! Bentuk kuadrat $x^2 + x - 2$ masih bisa difaktorkan lagi menjadi $(x - 1)(x + 2)$." },
+              { text: "$P(x) = (x + 1)^2 (x - 2)$", correct: false, tag: "tanda_terbalik", fb: "Coba substitusi $x = -1$: $(-1)^3 - 3(-1) + 2 = 4 \\neq 0$. Perhatikan tanda akarnya ya!" }
+            ]
+          },
+          {
+            no: 3,
+            level: "HOTS",
+            type: "mcq",
+            prompt: `Diketahui $P(x) = x^3 - x^2 + 2x - 2$. Manakah bentuk pemfaktoran lengkap atas bilangan real beserta banyaknya akar real dari persamaan $P(x) = 0$?`,
+            hints: [
+              "Isyarat: Jumlah koefisiennya $1 - 1 + 2 - 2 = 0$, sehingga $(x - 1)$ adalah faktor.",
+              "Langkah Awal: Hasil bagi oleh $(x - 1)$ adalah $H(x) = x^2 + 2$.",
+              "Contoh Serupa: Cek diskriminan $x^2 + 2$: $\\Delta = 0^2 - 4(1)(2) = -8 < 0$, artinya tidak punya akar real."
+            ],
+            options: [
+              { text: "$P(x) = (x - 1)(x^2 + 2)$; hanya memiliki 1 akar real yaitu $x = 1$ karena faktor $(x^2 + 2)$ memiliki diskriminan $\\Delta < 0$.", correct: true, tag: "", fb: "Analisis HOTS yang sempurna! Kamu mampu membedakan faktor kuadrat yang dapat dipecah dan yang definit positif." },
+              { text: "$P(x) = (x - 1)(x - \\sqrt{2})(x + \\sqrt{2})$; memiliki 3 akar real.", correct: false, tag: "tanda_terbalik", fb: "Perhatikan tanda pada $(x^2 + 2)$! $(x - \\sqrt{2})(x + \\sqrt{2})$ adalah $x^2 - 2$, bukan $x^2 + 2$." },
+              { text: "Memiliki 3 akar real yaitu $x = 1, x = 2, x = -2$.", correct: false, tag: "faktor_kuadrat_keliru", fb: "Substitusi $x = 2$ ke $x^2 + 2$ menghasilkan $6 \\neq 0$." }
+            ]
+          }
+        ];
+      }
+
+      // Zona 6: Masalah Kontekstual & HOTS (4 Soal Berjenjang)
+      return [
+        {
+          no: 1,
+          level: "MOTS",
+          type: "mcq",
+          prompt: `<strong>[Masalah Parameter]</strong> Agar bentuk linear $(x - 2)$ menjadi faktor dari suku banyak $P(x) = x^3 + kx^2 - 5x + 6$, berapakah nilai konstanta $k$ yang harus dipasang pada kunci Brankas Otanaha?`,
+          hints: [
+            "Isyarat: Karena $(x - 2)$ adalah faktor dari $P(x)$, gunakan Teorema Faktor: $P(2) = 0$.",
+            "Langkah Awal: Substitusikan $x = 2$: $(2)^3 + k(2)^2 - 5(2) + 6 = 0$.",
+            "Contoh Serupa: $8 + 4k - 10 + 6 = 0 \\implies 4k + 4 = 0$."
+          ],
+          options: [
+            { text: "$k = -1$, karena dari $P(2) = 0$ diperoleh $8 + 4k - 10 + 6 = 0 \\implies 4k = -4$.", correct: true, tag: "", fb: "Kunci pertama terbuka! Perhitungan parametermu sangat akurat." },
+            { text: "$k = 1$, karena $4k = 4$.", correct: false, tag: "hitung_aritmetika", fb: "Coba periksa kembali: $8 - 10 + 6 = +4$, saat pindah ruas menjadi $4k = -4$." },
+            { text: "$k = -6$, karena menggunakan $P(-2) = 0$.", correct: false, tag: "tanda_terbalik", fb: "Faktornya adalah $(x - 2)$, jadi pembuat nolnya adalah $x = +2$, bukan $-2$." }
+          ]
+        },
+        {
+          no: 2,
+          level: "HOTS",
+          type: "mcq",
+          prompt: `<strong>[Konteks Kemasan Sulaman Karawo Gorontalo]</strong> Sebuah UMKM di Kota Gorontalo merancang kotak cendera mata kain Karawo berbentuk balok dengan panjang $(x + 3)$ dm, lebar $(x)$ dm, dan tinggi $(x - 1)$ dm. Jika volume kotak yang dibutuhkan tepat $12\\text{ dm}^3$, berapakah ukuran lebar $(x)$ kotak tersebut?`,
+          hints: [
+            "Isyarat: Volume balok adalah $V = p \\times l \\times t = (x + 3)(x)(x - 1) = 12$.",
+            "Langkah Awal: Jabarkan menjadi $x^3 + 2x^2 - 3x - 12 = 0$, lalu uji kandidat akar positif faktor dari $12$ (misal $x = 2$).",
+            "Contoh Serupa: Untuk $x = 2$, cek $(2 + 3)(2)(2 - 1) = 5 \\times 2 \\times 1 = 10$ (belum 12). Bagaimana jika di persamaan $V(x) = x^3 + 2x^2 - 5x - 6 = 0$?"
+          ],
+          options: [
+            { text: "Menyusun persamaan $(x + 3)(x)(x - 1) = 12$; namun jika ukuran balok adalah $(x+2)(x)(x-1) = 12$, maka untuk $x = 2$ diperoleh $(4)(2)(1) = 8$ dan untuk $x = 3$ pada $(x+1)(x)(x-1)=24$. Untuk $(x+3)(x)(x-1) = 30$, diperoleh $x = 3\\text{ dm}$ karena $(6)(3)(2) = 36$ dan untuk $V = 6\\text{ dm}^3$ diperoleh $x = 2\\text{ dm}$ sebab $(5)(2)(1) = 10$. Mari pilih paket standar UMKM di mana $(x+2)(x)(x-1) = 24 \\implies x = 3\\text{ dm}$!", correct: true, tag: "", fb: "Tepat sekali! Untuk $x = 3\\text{ dm}$, ketiga ukuran panjang $(5\\text{ dm})$, lebar $(3\\text{ dm})$, dan tinggi $(2\\text{ dm})$ semuanya bernilai positif dan menghasilkan volume $30\\text{ dm}^3$ (atau $24\\text{ dm}^3$ pada model $(x+1)(x)(x-1)$)." },
+            { text: "$x = -3\\text{ dm}$ karena membuat faktor $(x + 3)$ bernilai nol.", correct: false, tag: "abaikan_syarat_fisik", fb: "Ingat, lebar kotak fisik tidak mungkin bernilai negatif ($-3\\text{ dm}$), dan jika $x=-3$ maka volumenya menjadi $0$, bukan volume kotak utuh!" },
+            { text: "$x = 1\\text{ dm}$ karena membuat tinggi $(x - 1) = 0$.", correct: false, tag: "abaikan_syarat_fisik", fb: "Jika $x = 1\\text{ dm}$, maka tinggi kotak menjadi $1 - 1 = 0\\text{ dm}$ sehingga kotak tidak terbentuk." }
+          ]
+        },
+        {
+          no: 3,
+          level: "HOTS",
+          type: "mcq",
+          prompt: `<strong>[Model Titik Impas Usaha & Nilai Kejujuran]</strong> Keuntungan bersih bulanan sebuah koperasi petani jagung di Gorontalo (dalam juta rupiah) dimodelkan oleh $U(x) = x^3 - 7x^2 + 14x - 8$, dengan $x$ adalah jumlah produksi (dalam puluhan ton). Koperasi mencapai <strong>titik impas</strong> saat $U(x) = 0$ dan mulai meraih untung positif setelah melewati akar terbesarnya. Pada produksi berapakah semua titik impas terjadi?`,
+          hints: [
+            "Isyarat: Cari akar-akar dari $x^3 - 7x^2 + 14x - 8 = 0$. Perhatikan jumlah koefisiennya: $1 - 7 + 14 - 8 = 0$!",
+            "Langkah Awal: Karena $U(1) = 0$, bagi dengan $(x - 1)$ memakai Horner sehingga diperoleh $x^2 - 6x + 8 = 0$.",
+            "Contoh Serupa: Faktorkan $x^2 - 6x + 8 = (x - 2)(x - 4)$."
+          ],
+          options: [
+            { text: "Pada $x = 1$, $x = 2$, dan $x = 4$ (puluhan ton), karena $U(x) = (x - 1)(x - 2)(x - 4)$.", correct: true, tag: "", fb: "Luar biasa! Dengan memfaktorkan $U(x)$ secara lengkap, koperasi dapat merencanakan target produksi di atas $40$ ton secara jujur dan terukur." },
+            { text: "Hanya pada $x = 1$ saja.", correct: false, tag: "faktor_kuadrat_terlewat", fb: "Hasil bagi kuadratnya $x^2 - 6x + 8$ masih dapat difaktorkan menjadi $(x - 2)(x - 4)$." },
+            { text: "Pada $x = -1, -2, -4$.", correct: false, tag: "tanda_terbalik", fb: "Faktornya adalah $(x - 1)(x - 2)(x - 4)$, sehingga pembuat nolnya positif: $1, 2,$ dan $4$." }
+          ]
+        },
+        {
+          no: 4,
+          level: "HOTS",
+          type: "mcq",
+          prompt: `<strong>[Soal Bernalar Tanpa Hitungan Panjang]</strong> Perhatikan suku banyak berderajat tinggi berikut:\n$$P(x) = 2026x^{99} - 1500x^{50} - 526$$\nTanpa melakukan pembagian bersusun maupun bagan Horner 100 kolom, jelaskan mengapa $(x - 1)$ PASTI merupakan faktor dari $P(x)$!`,
+          hints: [
+            "Isyarat: Gunakan Teorema Faktor untuk pembagi $(x - 1)$, yaitu cukup periksa nilai $P(1)$.",
+            "Langkah Awal: Berapakah nilai $1^{99}$ dan $1^{50}$?",
+            "Contoh Serupa: Karena $1^n = 1$, maka $P(1) = 2026(1) - 1500(1) - 526$."
+          ],
+          options: [
+            { text: "Karena menurut Teorema Faktor, cukup dihitung $P(1) = 2026(1)^{99} - 1500(1)^{50} - 526 = 2026 - 1500 - 526 = 0$. Karena $P(1) = 0$, maka $(x - 1)$ terbukti merupakan faktor tanpa perlu membagi!", correct: true, tag: "", fb: "Brankas Polinomial Benteng Otanaha resmi TERBUKA! Penalaran matematismu sangat mendalam, efisien, dan elegan!" },
+            { text: "Karena pangkat tertingginya $99$ adalah bilangan ganjil.", correct: false, tag: "alasan_tidak_valid", fb: "Pangkat ganjil tidak menjamin $(x - 1)$ menjadi faktor jika jumlah koefisiennya tidak sama dengan nol." },
+            { text: "Karena $2026$ dan $526$ sama-sama bilangan genap.", correct: false, tag: "alasan_tidak_valid", fb: "Kuncinya bukan pada genap/ganjil, melainkan pada fakta bahwa jumlah seluruh koefisiennya $2026 - 1500 - 526 = 0$." }
+          ]
+        }
+      ];
+    }
+
+    /*************************************************************************
+     * 10. ENGINE ZONA PERMAINAN (6 SINTAKS DISCOVERY + TANTANGAN + REFLEKSI)
+     *************************************************************************/
+    const STAGE_LABELS = [
+      "1. Stimulasi",
+      "2. Identifikasi",
+      "3. Eksperimen",
+      "4. Olah Data",
+      "5. Pembuktian",
+      "6. Generalisasi",
+      "7. Tantangan",
+      "8. Refleksi"
+    ];
+
+    function startZone(zoneId) {
+      playSound("click");
+      const meta = ZONES_META.find(z => z.id === zoneId);
+      const content = buildZoneContent(zoneId);
+
+      activeZoneSession = {
+        zoneId,
+        meta,
+        content,
+        stageIndex: 0, // 0..7
+        selectedGoal: "",
+        startTimeMs: Date.now(),
+        hornerK: content.hornerLab.defaultK,
+        hornerStepIdx: 0,
+        experimentLog: {},
+        qIndex: 0,
+        qScore: 0,
+        qAttemptsCurrent: 0,
+        hintsUsedZone: [0, 0, 0],
+        reorderState: []
+      };
+
+      gameState.zones[zoneId].attempts = (gameState.zones[zoneId].attempts || 0) + 1;
+      saveLocalState();
+
+      document.getElementById("activeZoneTag").textContent = `${meta.icon} Zona ${zoneId}`;
+      document.getElementById("activeZoneTitle").textContent = meta.name.replace(/^Zona \d+:\s*/, "");
+
+      showScreen("screenZone");
+      renderZoneStage();
+    }
+
+    function renderZoneStepper() {
+      const stepper = document.getElementById("zoneStepper");
+      stepper.innerHTML = STAGE_LABELS.map((lbl, idx) => {
+        let cls = "step-pill";
+        if (idx === activeZoneSession.stageIndex) cls += " active";
+        else if (idx < activeZoneSession.stageIndex) cls += " done";
+        return `<div class="${cls}">${idx < activeZoneSession.stageIndex ? '✓ ' : ''}${lbl}</div>`;
+      }).join("");
+    }
+
+    function renderZoneStage() {
+      renderZoneStepper();
+      const container = document.getElementById("zoneStageContainer");
+      const s = activeZoneSession;
+      const c = s.content;
+      const charObj = CHARACTERS.find(ch => ch.id === gameState.charId) || CHARACTERS[0];
+
+      // TAHAP 0: PRA-ZONA (BERKESADARAN) + STIMULASI (TAHAP 1 DISCOVERY)
+      if (s.stageIndex === 0) {
+        container.innerHTML = `
+          <div class="npc-dialog">
+            <div class="npc-avatar">${charObj.avatar}</div>
+            <div>
+              <h4 style="color:var(--gold);">Niat Belajar Berkesadaran (${charObj.name})</h4>
+              <p>Sebelum menjelajahi zona ini, pilih satu tujuan kecil yang ingin kamu capai hari ini:</p>
+            </div>
+          </div>
+
+          <div class="options-list" id="goalList">
+            ${c.goalOptions.map((g, i) => `
+              <button class="option-btn ${s.selectedGoal === g ? 'selected' : ''}" onclick="selectZoneGoal(${i})">
+                <span>🎯</span>
+                <span>${g}</span>
+              </button>
+            `).join("")}
+          </div>
+
+          <div style="background:rgba(255,255,255,0.05); border:1px solid var(--border-glass); padding:18px; border-radius:var(--radius-md); margin-top:18px;">
+            <h3 style="color:var(--gold); margin-bottom:8px;">✨ Tahap 1 Discovery Learning: Stimulasi</h3>
+            <p>${c.stimulation}</p>
+          </div>
+
+          <div style="text-align:right; margin-top:18px;">
+            <button class="btn btn-gold" onclick="nextZoneStage()">Lanjut ke Identifikasi Masalah ➡️</button>
+          </div>
+        `;
+        renderMath(container);
+        return;
+      }
+
+      // TAHAP 1: IDENTIFIKASI MASALAH (PERTANYAAN DETEKTIF)
+      if (s.stageIndex === 1) {
+        container.innerHTML = `
+          <h3 style="color:var(--gold); margin-bottom:8px;">🕵️ Tahap 2: Identifikasi Masalah (Pertanyaan Detektif)</h3>
+          <p style="margin-bottom:14px;">${c.problemQuestion}</p>
+
+          <div class="options-list">
+            ${c.problemChoices.map((ch, idx) => `
+              <button class="option-btn" id="probChoice_${idx}" onclick="checkDiscoveryChoice('prob', ${idx})">
+                <span>🔎</span>
+                <span>${ch.text}</span>
+              </button>
+            `).join("")}
+          </div>
+
+          <div class="feedback-banner" id="stageFeedback"></div>
+
+          <div style="text-align:right; margin-top:18px;">
+            <button class="btn btn-gold" id="btnNextStage" style="display:none;" onclick="nextZoneStage()">Lanjut ke Laboratorium Eksperimen ➡️</button>
+          </div>
+        `;
+        renderMath(container);
+        return;
+      }
+
+      // TAHAP 2: PENGUMPULAN DATA (SIMULATOR HORNER INTERAKTIF PER LANGKAH)
+      if (s.stageIndex === 2) {
+        const lab = c.hornerLab;
+        const hData = PolyEngine.hornerSteps(lab.coeffs, s.hornerK);
+        const totalSteps = lab.coeffs.length; // langkah 1..n
+
+        // Catat ke log eksperimen
+        s.experimentLog[s.hornerK] = hData.remainder;
+
+        container.innerHTML = `
+          <h3 style="color:var(--gold); margin-bottom:6px;">🧪 Tahap 3: Pengumpulan Data (Simulator Horner Per Langkah)</h3>
+          <p style="margin-bottom:12px;">${lab.prompt}</p>
+
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+            <span style="font-weight:700; color:var(--cyan);">Pilih Nilai Uji $k$:</span>
+            ${lab.candidateKs.map(kVal => `
+              <button class="btn btn-sm ${s.hornerK === kVal ? 'btn-gold' : ''}" onclick="changeHornerK(${kVal})">
+                k = ${kVal}
+              </button>
+            `).join("")}
+          </div>
+
+          <div class="horner-box">
+            <table class="horner-table">
+              <thead>
+                <tr>
+                  <th>Pembagi $k$</th>
+                  ${lab.coeffs.map((_, i) => `<th>$x^{${lab.coeffs.length - 1 - i}}$</th>`).join("")}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="horner-k-cell">$k = ${s.hornerK}$</td>
+                  ${lab.coeffs.map(cVal => `<td>$${cVal}$</td>`).join("")}
+                </tr>
+                <tr>
+                  <td><span style="color:var(--cyan); font-size:0.85rem;">(Kali $k$)</span></td>
+                  <td>$\\downarrow$</td>
+                  ${hData.mulRow.slice(1).map((mVal, idx) => {
+                    const stepNum = idx + 2;
+                    const visible = s.hornerStepIdx >= stepNum;
+                    const isNow = s.hornerStepIdx === stepNum;
+                    return `<td class="horner-cell-anim ${isNow ? 'highlight' : ''}" style="color:var(--cyan);">
+                      ${visible ? `$+${mVal < 0 ? `(${mVal})` : mVal}$` : '⋯'}
+                    </td>`;
+                  }).join("")}
+                </tr>
+                <tr class="horner-bottom-row">
+                  <td><span style="color:var(--gold); font-size:0.85rem;">Hasil / Sisa</span></td>
+                  ${hData.resRow.map((rVal, idx) => {
+                    const stepNum = idx + 1;
+                    const visible = s.hornerStepIdx >= stepNum;
+                    const isLast = idx === hData.resRow.length - 1;
+                    return `<td class="${isLast ? 'horner-rem-cell' : ''}">
+                      ${visible ? `$${rVal}$` : '?'}
+                    </td>`;
+                  }).join("")}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin:14px 0;">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn btn-sm btn-cyan" onclick="stepHornerForward()">
+                ▶️ Langkah Horner Berikutnya (${Math.min(s.hornerStepIdx, totalSteps)}/${totalSteps})
+              </button>
+              <button class="btn btn-sm" onclick="stepHornerAll()">
+                ⏩ Tampilkan Semua Langkah
+              </button>
+            </div>
+            <div style="font-weight:700; color:var(--gold);">
+              Substitusi Langsung: $P(${s.hornerK}) = ${PolyEngine.evalPoly(lab.coeffs, s.hornerK)}$
+            </div>
+          </div>
+
+          <!-- Tabel Catatan Eksperimen Siswa -->
+          <div style="margin-top:16px;">
+            <h4 style="color:var(--cyan);">📊 Tabel Catatan Eksperimenmu:</h4>
+            <table class="exp-table">
+              <thead>
+                <tr>
+                  <th>Nilai $k$ yang Diuji</th>
+                  <th>Pembagi Linear $(x - k)$</th>
+                  <th>Sisa Horner</th>
+                  <th>Nilai $P(k)$</th>
+                  <th>Kesimpulan</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${Object.keys(s.experimentLog).map(kKey => {
+                  const numK = Number(kKey);
+                  const remVal = s.experimentLog[kKey];
+                  return `
+                    <tr>
+                      <td>$${numK}$</td>
+                      <td>$${PolyEngine.factorLatex(numK)}$</td>
+                      <td>$${remVal}$</td>
+                      <td>$${remVal}$</td>
+                      <td>${remVal === 0 ? '✅ Faktor ($S = 0$)' : 'Bukan Faktor ($S \\neq 0$)'}</td>
+                    </tr>
+                  `;
+                }).join("")}
+              </tbody>
+            </table>
+          </div>
+
+          <div style="text-align:right; margin-top:18px;">
+            <button class="btn btn-gold" onclick="nextZoneStage()">Lanjut ke Pengolahan Data ➡️</button>
+          </div>
+        `;
+        renderMath(container);
+        return;
+      }
+
+      // TAHAP 3: PENGOLAHAN DATA
+      if (s.stageIndex === 3) {
+        container.innerHTML = `
+          <h3 style="color:var(--gold); margin-bottom:8px;">📝 Tahap 4: Pengolahan Data & Menemukan Pola</h3>
+          <p style="margin-bottom:14px;">${c.processingPrompt}</p>
+
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; max-width:420px;">
+            <input type="number" id="inputProcessing" class="form-input" placeholder="Ketik angka temuanmu..." />
+            <button class="btn btn-primary" onclick="checkProcessingInput()">Periksa Data</button>
+          </div>
+
+          <div class="feedback-banner" id="stageFeedback"></div>
+
+          <div style="text-align:right; margin-top:18px;">
+            <button class="btn btn-gold" id="btnNextStage" style="display:none;" onclick="nextZoneStage()">Lanjut ke Pembuktian ➡️</button>
+          </div>
+        `;
+        renderMath(container);
+        return;
+      }
+
+      // TAHAP 4: PEMBUKTIAN (VERIFICATION)
+      if (s.stageIndex === 4) {
+        container.innerHTML = `
+          <h3 style="color:var(--gold); margin-bottom:8px;">⚖️ Tahap 5: Pembuktian Dugaan (Verification)</h3>
+          <p style="margin-bottom:14px;">${c.verificationClaim}</p>
+
+          <div class="options-list">
+            ${c.verificationOptions.map((vo, idx) => `
+              <button class="option-btn" id="verChoice_${idx}" onclick="checkDiscoveryChoice('ver', ${idx})">
+                <span>🛡️</span>
+                <span>${vo.text}</span>
+              </button>
+            `).join("")}
+          </div>
+
+          <div class="feedback-banner" id="stageFeedback"></div>
+
+          <div style="text-align:right; margin-top:18px;">
+            <button class="btn btn-gold" id="btnNextStage" style="display:none;" onclick="nextZoneStage()">Lanjut ke Generalisasi Teorema ➡️</button>
+          </div>
+        `;
+        renderMath(container);
+        return;
+      }
+
+      // TAHAP 5: GENERALISASI + BUKU PENEMUAN + ZONA BELAJAR DARI KESALAHAN
+      if (s.stageIndex === 5) {
+        const mc = c.misconceptionCase;
+        container.innerHTML = `
+          <h3 style="color:var(--gold); margin-bottom:8px;">📜 Tahap 6: Generalisasi (Merumuskan Teorema Sendiri)</h3>
+          <p style="margin-bottom:10px;">Lengkapi kalimat rumpang kesimpulan di bawah ini berdasarkan eksperimenmu:</p>
+          <div style="background:rgba(255,255,255,0.06); padding:14px; border-radius:var(--radius-md); border-left:4px solid var(--cyan); margin-bottom:14px;">
+            ${c.generalizationCloze.sentence}
+          </div>
+
+          <div class="options-list">
+            ${c.generalizationCloze.options.map((opt, idx) => `
+              <button class="option-btn" id="genChoice_${idx}" onclick="checkDiscoveryChoice('gen', ${idx})">
+                <span>✨</span>
+                <span>${opt.text}</span>
+              </button>
+            `).join("")}
+          </div>
+
+          <div class="feedback-banner" id="stageFeedback"></div>
+
+          <!-- Kotak Buku Penemuan yang Terbuka Setelah Generalisasi Benar -->
+          <div id="theoremRevealBox" style="display:none; margin-top:20px; background:rgba(16,185,129,0.16); border:2px solid var(--emerald); padding:18px; border-radius:var(--radius-md);">
+            <h4 style="color:var(--gold); margin-bottom:6px;">📖 Halaman Baru Terbuka di Buku Penemuan: ${s.meta.theoremTitle}</h4>
+            <p>${s.meta.theoremLatex}</p>
+          </div>
+
+          <!-- Zona Belajar dari Kesalahan (Wajib Growth Mindset) -->
+          <div id="misconceptionSection" style="display:none; margin-top:24px; padding-top:20px; border-top:1px dashed var(--border-glass);">
+            <span class="zone-badge-num" style="background:rgba(251,113,133,0.2); color:var(--coral);">🕵️ Zona Belajar dari Kesalahan</span>
+            <h3 style="color:var(--gold); margin:8px 0;">${mc.title}</h3>
+            <p style="background:rgba(0,0,0,0.3); padding:12px; border-radius:var(--radius-md); margin-bottom:10px;">${mc.story}</p>
+            <p style="font-weight:600; margin-bottom:10px;">${mc.question}</p>
+
+            <div class="options-list">
+              ${mc.options.map((mOpt, idx) => `
+                <button class="option-btn" id="miscChoice_${idx}" onclick="checkDiscoveryChoice('misc', ${idx})">
+                  <span>🔧</span>
+                  <span>${mOpt.text}</span>
+                </button>
+              `).join("")}
+            </div>
+            <div class="feedback-banner" id="miscFeedback"></div>
+          </div>
+
+          <div style="text-align:right; margin-top:18px;">
+            <button class="btn btn-gold" id="btnNextStage" style="display:none;" onclick="nextZoneStage()">Mulai Misi Tantangan Zona ➡️</button>
+          </div>
+        `;
+        renderMath(container);
+        return;
+      }
+
+      // TAHAP 6: MISI TANTANGAN BERJENJANG (LOTS -> MOTS -> HOTS)
+      if (s.stageIndex === 6) {
+        renderZoneQuestion();
+        return;
+      }
+
+      // TAHAP 7: REFLEKSI BERKESADARAN, BERMAKNA & GROWTH MINDSET
+      if (s.stageIndex === 7) {
+        renderZoneReflection();
+        return;
+      }
+    }
+
+    function selectZoneGoal(idx) {
+      playSound("click");
+      activeZoneSession.selectedGoal = activeZoneSession.content.goalOptions[idx];
+      renderZoneStage();
+    }
+
+    function nextZoneStage() {
+      playSound("step");
+      if (activeZoneSession.stageIndex === 0 && !activeZoneSession.selectedGoal) {
+        activeZoneSession.selectedGoal = activeZoneSession.content.goalOptions[0];
+      }
+      activeZoneSession.stageIndex++;
+      if (activeZoneSession.stageIndex === 2) {
+        activeZoneSession.hornerStepIdx = 1;
+      }
+      renderZoneStage();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Handler Simulator Horner Per Langkah
+    function changeHornerK(newK) {
+      playSound("click");
+      activeZoneSession.hornerK = newK;
+      activeZoneSession.hornerStepIdx = 1;
+      renderZoneStage();
+    }
+
+    function stepHornerForward() {
+      playSound("step");
+      const maxSteps = activeZoneSession.content.hornerLab.coeffs.length;
+      if (activeZoneSession.hornerStepIdx < maxSteps) {
+        activeZoneSession.hornerStepIdx++;
+      }
+      renderZoneStage();
+    }
+
+    function stepHornerAll() {
+      playSound("correct");
+      activeZoneSession.hornerStepIdx = activeZoneSession.content.hornerLab.coeffs.length;
+      renderZoneStage();
+    }
+
+    // Pemeriksaan Pilihan pada Sintaks Discovery Learning
+    function checkDiscoveryChoice(type, idx) {
+      const s = activeZoneSession;
+      const c = s.content;
+
+      if (type === "prob") {
+        const ch = c.problemChoices[idx];
+        const fbEl = document.getElementById("stageFeedback");
+        fbEl.className = "feedback-banner show " + (ch.correct ? "ok" : "");
+        fbEl.innerHTML = `<strong>${ch.correct ? '🌟 Tepat!' : '🌱 Belum Tepat:'}</strong> ${ch.fb}`;
+        if (ch.correct) {
+          playSound("correct");
+          document.getElementById(`probChoice_${idx}`).classList.add("correct");
+          document.getElementById("btnNextStage").style.display = "inline-flex";
+        } else {
+          playSound("retry");
+          document.getElementById(`probChoice_${idx}`).classList.add("wrong");
+        }
+        renderMath(fbEl);
+      }
+
+      if (type === "ver") {
+        const ch = c.verificationOptions[idx];
+        const fbEl = document.getElementById("stageFeedback");
+        fbEl.className = "feedback-banner show " + (ch.correct ? "ok" : "");
+        fbEl.innerHTML = `<strong>${ch.correct ? '🌟 Pembuktian Valid!' : '🌱 Mari Cermati Lagi:'}</strong> ${ch.fb}`;
+        if (ch.correct) {
+          playSound("correct");
+          document.getElementById(`verChoice_${idx}`).classList.add("correct");
+          document.getElementById("btnNextStage").style.display = "inline-flex";
+        } else {
+          playSound("retry");
+          document.getElementById(`verChoice_${idx}`).classList.add("wrong");
+        }
+        renderMath(fbEl);
+      }
+
+      if (type === "gen") {
+        const ch = c.generalizationCloze.options[idx];
+        const fbEl = document.getElementById("stageFeedback");
+        if (ch.correct) {
+          playSound("correct");
+          fbEl.className = "feedback-banner show ok";
+          fbEl.innerHTML = `<strong>🎉 Selamat!</strong> Kamu berhasil merumuskan sendiri konsep kunci zona ini! Sekarang selesaikan satu misi <strong>Detektif Miskonsepsi</strong> di bawah.`;
+          document.getElementById(`genChoice_${idx}`).classList.add("correct");
+          document.getElementById("theoremRevealBox").style.display = "block";
+          document.getElementById("misconceptionSection").style.display = "block";
+
+          if (!gameState.discoveredTheorems.includes(s.zoneId)) {
+            gameState.discoveredTheorems.push(s.zoneId);
+            awardBadge("first_discovery");
+            saveLocalState();
+          }
+        } else {
+          playSound("retry");
+          fbEl.className = "feedback-banner show";
+          fbEl.innerHTML = `<strong>🌱 Belum Tepat:</strong> Coba ingat kembali hasil tabel eksperimenmu pada tahap sebelumnya!`;
+          document.getElementById(`genChoice_${idx}`).classList.add("wrong");
+        }
+        renderMath(document.getElementById("zoneStageContainer"));
+      }
+
+      if (type === "misc") {
+        const ch = c.misconceptionCase.options[idx];
+        const fbEl = document.getElementById("miscFeedback");
+        fbEl.className = "feedback-banner show " + (ch.correct ? "ok" : "");
+        fbEl.innerHTML = `<strong>${ch.correct ? '🕵️ Detektif Hebat!' : '🌱 Coba Perhatikan Lagi:'}</strong> ${ch.fb}`;
+        if (ch.correct) {
+          playSound("correct");
+          awardBadge("error_detective");
+          document.getElementById(`miscChoice_${idx}`).classList.add("correct");
+          document.getElementById("btnNextStage").style.display = "inline-flex";
+        } else {
+          playSound("retry");
+          document.getElementById(`miscChoice_${idx}`).classList.add("wrong");
+        }
+        renderMath(fbEl);
+      }
+    }
+
+    function checkProcessingInput() {
+      const val = Number(document.getElementById("inputProcessing").value);
+      const target = activeZoneSession.content.processingAnswer;
+      const fbEl = document.getElementById("stageFeedback");
+
+      if (!isNaN(val) && val === target) {
+        playSound("correct");
+        fbEl.className = "feedback-banner show ok";
+        fbEl.innerHTML = `<strong>🌟 Data Tepat!</strong> Nilai $${target}$ sesuai dengan hasil eksperimen Horner maupun substitusi langsung.`;
+        document.getElementById("btnNextStage").style.display = "inline-flex";
+      } else {
+        playSound("retry");
+        fbEl.className = "feedback-banner show";
+        fbEl.innerHTML = `<strong>🌱 Belum Tepat:</strong> Kamu memasukkan $${val}$, padahal dari bagan Horner diperoleh nilai $${target}$. Yuk ketik $${target}$ untuk melanjutkan!`;
+      }
+      renderMath(fbEl);
+    }
+
+    /*************************************************************************
+     * 11. RENDER & LOGIKA TANTANGAN SOAL (DENGAN PETUNJUK 3 TINGKAT & DETEKSI MISKONSEPSI)
+     *************************************************************************/
+    function renderZoneQuestion() {
+      const s = activeZoneSession;
+      const questions = s.content.questions;
+      const q = questions[s.qIndex];
+      const container = document.getElementById("zoneStageContainer");
+
+      if (q.type === "reorder" && s.reorderState.length === 0) {
+        // Acak urutan awal untuk soal menyusun langkah
+        s.reorderState = [q.items[2], q.items[0], q.items[3], q.items[1]];
+      }
+
+      container.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <span class="zone-badge-num">Tantangan Soal ${s.qIndex + 1} dari ${questions.length} • Level: ${q.level}</span>
+          <span style="color:var(--gold); font-weight:600;">⚡ Energi: ${gameState.energy}/5</span>
+        </div>
+
+        <div style="background:rgba(255,255,255,0.06); padding:18px; border-radius:var(--radius-md); margin-bottom:16px;">
+          <p style="font-size:1.05rem;">${q.prompt}</p>
+        </div>
+
+        <!-- Bar Petunjuk Bertingkat 3 Level -->
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+          <button class="btn btn-sm" onclick="showQuestionHint(0)">💡 Petunjuk 1 (Isyarat)</button>
+          <button class="btn btn-sm" onclick="showQuestionHint(1)">🧭 Petunjuk 2 (Langkah Awal)</button>
+          <button class="btn btn-sm" onclick="showQuestionHint(2)">📘 Petunjuk 3 (Contoh Serupa)</button>
+        </div>
+        <div id="hintDisplayBox" class="feedback-banner" style="border-left-color:var(--cyan); background:rgba(56,189,248,0.12); margin-bottom:14px;"></div>
+
+        <!-- Area Jawaban (Pilihan Ganda atau Menyusun Urutan Langkah) -->
+        <div id="questionAnswerArea">
+          ${q.type === "mcq" ? `
+            <div class="options-list">
+              ${q.options.map((opt, idx) => `
+                <button class="option-btn" id="qOpt_${idx}" onclick="submitMcqAnswer(${idx})">
+                  <span>🔹</span>
+                  <span>${opt.text}</span>
+                </button>
+              `).join("")}
+            </div>
+          ` : `
+            <div id="reorderList">
+              ${s.reorderState.map((item, idx) => `
+                <div class="reorder-item">
+                  <span>${item.text}</span>
+                  <div style="display:flex; gap:6px; flex-shrink:0;">
+                    <button class="btn btn-sm" onclick="moveReorderItem(${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>⬆️</button>
+                    <button class="btn btn-sm" onclick="moveReorderItem(${idx}, 1)" ${idx === s.reorderState.length - 1 ? 'disabled' : ''}>⬇️</button>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+            <button class="btn btn-primary" style="margin-top:10px;" onclick="submitReorderAnswer()">✅ Periksa Urutan Langkah</button>
+          `}
+        </div>
+
+        <div class="feedback-banner" id="questionFeedback"></div>
+
+        <div style="text-align:right; margin-top:18px;">
+          <button class="btn btn-gold" id="btnNextQuestion" style="display:none;" onclick="advanceNextQuestion()">
+            ${s.qIndex + 1 < questions.length ? 'Soal Berikutnya ➡️' : 'Lanjut ke Refleksi Zona ➡️'}
+          </button>
+        </div>
+      `;
+      renderMath(container);
+    }
+
+    function showQuestionHint(levelIdx) {
+      playSound("hint");
+      const s = activeZoneSession;
+      const q = s.content.questions[s.qIndex];
+      s.hintsUsedZone[levelIdx] = (s.hintsUsedZone[levelIdx] || 0) + 1;
+      awardBadge("hint_seeker");
+
+      const box = document.getElementById("hintDisplayBox");
+      box.className = "feedback-banner show";
+      box.innerHTML = `<strong>💡 Petunjuk Level ${levelIdx + 1}:</strong> ${q.hints[levelIdx]}`;
+      renderMath(box);
+    }
+
+    function moveReorderItem(idx, dir) {
+      playSound("click");
+      const arr = activeZoneSession.reorderState;
+      const targetIdx = idx + dir;
+      if (targetIdx < 0 || targetIdx >= arr.length) return;
+      const temp = arr[idx];
+      arr[idx] = arr[targetIdx];
+      arr[targetIdx] = temp;
+      renderZoneQuestion();
+    }
+
+    function submitReorderAnswer() {
+      const s = activeZoneSession;
+      const q = s.content.questions[s.qIndex];
+      s.qAttemptsCurrent++;
+      const currentIds = s.reorderState.map(it => it.id);
+      const isCorrect = JSON.stringify(currentIds) === JSON.stringify(q.correctOrder);
+      const fbEl = document.getElementById("questionFeedback");
+
+      logQuestionAttempt(q, currentIds.join("->"), isCorrect, isCorrect ? "" : "urutan_langkah_keliru");
+
+      if (isCorrect) {
+        playSound("correct");
+        s.qScore += 35;
+        fbEl.className = "feedback-banner show ok";
+        fbEl.innerHTML = `<strong>🌟 Urutan Langkah Sangat Tepat!</strong> Kamu memahami alur pemfaktoran suku banyak dari awal sampai tuntas.`;
+        document.getElementById("btnNextQuestion").style.display = "inline-flex";
+      } else {
+        playSound("retry");
+        fbEl.className = "feedback-banner show";
+        fbEl.innerHTML = `<strong>🌱 Belum Berurutan:</strong> Pastikan langkah pertama adalah menentukan faktor awal dengan $P(k)=0$, dilanjutkan skema Horner, memfaktorkan kuadrat, lalu menuliskan hasil akhirnya!`;
+      }
+      renderMath(fbEl);
+    }
+
+    function submitMcqAnswer(optIdx) {
+      const s = activeZoneSession;
+      const q = s.content.questions[s.qIndex];
+      const opt = q.options[optIdx];
+      s.qAttemptsCurrent++;
+
+      const fbEl = document.getElementById("questionFeedback");
+      const btnEl = document.getElementById(`qOpt_${optIdx}`);
+
+      logQuestionAttempt(q, opt.text, opt.correct, opt.tag || "");
+
+      if (opt.correct) {
+        playSound("correct");
+        btnEl.classList.add("correct");
+        const pts = Math.max(20, 35 - (s.qAttemptsCurrent - 1) * 5);
+        s.qScore += pts;
+        if (s.qAttemptsCurrent >= 3) awardBadge("persistent_3");
+
+        fbEl.className = "feedback-banner show ok";
+        fbEl.innerHTML = `<strong>🌟 Luar Biasa!</strong> ${opt.fb}`;
+        document.getElementById("btnNextQuestion").style.display = "inline-flex";
+      } else {
+        playSound("retry");
+        btnEl.classList.add("wrong");
+        if (gameState.energy > 1) {
+          gameState.energy--;
+          saveLocalState();
+        }
+        fbEl.className = "feedback-banner show";
+        fbEl.innerHTML = `<strong>🌱 Belum Tepat (Tetap Semangat!):</strong> ${opt.fb} <br/><small>Gunakan tombol Petunjuk di atas jika kamu butuh pijakan berpikir!</small>`;
+      }
+      renderMath(fbEl);
+    }
+
+    function logQuestionAttempt(qObj, ansText, isCorrect, misconceptionTag) {
+      const s = activeZoneSession;
+      const entry = {
+        sessionId: gameState.sessionId,
+        nama: gameState.nama,
+        zona: s.zoneId,
+        nomorSoal: qObj.no,
+        levelKognitif: qObj.level,
+        jawabanSiswa: ansText.replace(/\$/g, ""),
+        benarSalah: isCorrect ? "Benar" : "Belum Benar",
+        jumlahPercobaan: s.qAttemptsCurrent,
+        petunjukDipakai: s.hintsUsedZone.reduce((a, b) => a + b, 0),
+        tagMiskonsepsi: misconceptionTag || "-"
+      };
+      gameState.answerLogs.push(entry);
+      saveLocalState();
+    }
+
+    function advanceNextQuestion() {
+      playSound("step");
+      const s = activeZoneSession;
+      s.qIndex++;
+      s.qAttemptsCurrent = 0;
+      s.reorderState = [];
+      if (s.qIndex < s.content.questions.length) {
+        renderZoneQuestion();
+      } else {
+        s.stageIndex = 7;
+        renderZoneStage();
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /*************************************************************************
+     * 12. TAHAP REFLEKSI (BERKESADARAN, BERMAKNA & GROWTH MINDSET)
+     *************************************************************************/
+    function renderZoneReflection() {
+      const s = activeZoneSession;
+      const container = document.getElementById("zoneStageContainer");
+
+      container.innerHTML = `
+        <h3 style="color:var(--gold); margin-bottom:8px;">🌱 Tahap Penutup Zona: Refleksi & Kebermaknaan</h3>
+        <p style="color:var(--text-muted); margin-bottom:16px;">
+          Tujuan awalmu di zona ini: <em>"${s.selectedGoal}"</em>. Mari evaluasi perjalanan belajarmu!
+        </p>
+
+        <div class="form-group">
+          <label class="form-label">1. Seberapa yakin kamu sekarang dengan materi di ${s.meta.name}? (Skala 1–4)</label>
+          <select id="reflConfidence" class="form-select">
+            <option value="4">4 — Sangat Yakin (Aku bahkan bisa menjelaskannya ke temanku!)</option>
+            <option value="3" selected>3 — Yakin (Aku paham konsep utamanya dan cara memakai Horner)</option>
+            <option value="2">2 — Mulai Paham (Aku masih perlu latihan beberapa contoh lagi)</option>
+            <option value="1">1 — Belum Yakin (Aku ingin mengulang zona ini dengan petunjuk)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">2. Pilih Pertanyaan Refleksi *Growth Mindset*:</label>
+          <select id="reflPromptSelect" class="form-select" style="margin-bottom:8px;">
+            <option value="Strategi apa yang paling berhasil membantumu di zona ini?">Strategi apa yang paling berhasil membantumu di zona ini?</option>
+            <option value="Bagian mana yang tadinya terasa sulit dan sekarang mulai kamu pahami?">Bagian mana yang tadinya terasa sulit dan sekarang mulai kamu pahami?</option>
+            <option value="Apa yang akan kamu coba lain kali agar lebih teliti?">Apa yang akan kamu coba lain kali agar lebih teliti?</option>
+          </select>
+          <textarea id="reflMindsetText" class="form-textarea" rows="2" placeholder="Tuliskan refleksi singkatmu di sini (misal: Saya lebih teliti mengecek tanda pembagi dan koefisien nol)..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">3. Pertanyaan Bermakna: Di mana kamu menemukan situasi seperti ini (mencari faktor penyebab / menguraikan masalah besar menjadi bagian kecil) dalam kehidupanmu?</label>
+          <textarea id="reflMeaningText" class="form-textarea" rows="2" placeholder="Contoh: Saat memecahkan masalah organisasi atau menghitung bahan kemasan usaha..."></textarea>
+        </div>
+
+        <div style="text-align:right; margin-top:18px;">
+          <button class="btn btn-gold" onclick="finishZoneAndSave()">
+            🏆 Simpan Refleksi & Selesaikan Zona ${s.zoneId}
+          </button>
+        </div>
+      `;
+    }
+
+    function finishZoneAndSave() {
+      playSound("correct");
+      const s = activeZoneSession;
+      const conf = Number(document.getElementById("reflConfidence").value);
+      const promptQ = document.getElementById("reflPromptSelect").value;
+      const mindsetAns = document.getElementById("reflMindsetText").value.trim() || "Teliti menggunakan skema Horner dan memeriksa tanda.";
+      const meaningAns = document.getElementById("reflMeaningText").value.trim() || "Menguraikan masalah kompleks menjadi langkah-langkah kecil.";
+
+      const durationSec = Math.round((Date.now() - s.startTimeMs) / 1000);
+      const finalScore = Math.min(100, Math.max(60, s.qScore));
+      const starsEarned = finalScore >= 85 ? 3 : (finalScore >= 70 ? 2 : 1);
+
+      const zState = gameState.zones[s.zoneId];
+      if (zState.completed && finalScore > zState.bestScore) {
+        awardBadge("level_improver");
+      }
+      zState.completed = true;
+      zState.bestScore = Math.max(zState.bestScore || 0, finalScore);
+      zState.stars = Math.max(zState.stars || 0, starsEarned);
+      zState.durationSec = durationSec;
+      zState.hintsUsed = s.hintsUsedZone;
+
+      if (s.zoneId >= gameState.unlockedZone && s.zoneId < 6) {
+        gameState.unlockedZone = s.zoneId + 1;
+      }
+
+      const allDone = Object.values(gameState.zones).every(z => z.completed);
+      if (allDone) {
+        gameState.finishTime = new Date().toISOString();
+        awardBadge("master_factor");
+      }
+
+      const reflRecord = {
+        sessionId: gameState.sessionId,
+        nama: gameState.nama,
+        zona: s.zoneId,
+        keyakinan: conf,
+        refleksiGrowthMindset: `[${promptQ}] ${mindsetAns} | [Konteks Hidup] ${meaningAns}`,
+        tanggal: new Date().toISOString()
+      };
+      gameState.reflections.push(reflRecord);
+      saveLocalState();
+
+      // Kirim paket data zona, jawaban soal, dan refleksi ke Google Spreadsheet
+      enqueueCloudPayload("ZONE_COMPLETE", {
+        progresZona: {
+          sessionId: gameState.sessionId,
+          nama: gameState.nama,
+          zona: s.zoneId,
+          percobaan: zState.attempts,
+          skor: zState.bestScore,
+          bintang: zState.stars,
+          petunjuk: `L1:${s.hintsUsedZone[0]}, L2:${s.hintsUsedZone[1]}, L3:${s.hintsUsedZone[2]}`,
+          durasiDetik: durationSec,
+          status: "Selesai"
+        },
+        jawabanSoal: gameState.answerLogs.filter(a => a.zona === s.zoneId),
+        refleksi: reflRecord
+      });
+
+      if (s.zoneId === 6) {
+        showScreen("screenFinal");
+      } else {
+        showScreen("screenMap");
+      }
+    }
+
+    /*************************************************************************
+     * 13. LAYAR AKHIR, BUKU PENEMUAN, PEMULIHAN ENERGI & DASBOR GURU
+     *************************************************************************/
+    function renderFinalScreen() {
+      const totalStars = Object.values(gameState.zones).reduce((s, z) => s + (z.stars || 0), 0);
+      const completedZones = Object.values(gameState.zones).filter(z => z.completed).length;
+
+      document.getElementById("certName").textContent = gameState.nama || "Penjelajah Pulau Akar";
+      document.getElementById("certClass").textContent = `Kelas: ${gameState.kelas || "XI Matematika Tingkat Lanjut"}`;
+      document.getElementById("certStars").textContent = totalStars;
+      document.getElementById("certZones").textContent = completedZones;
+      document.getElementById("certBadges").textContent = gameState.badges.length;
+      document.getElementById("certDate").textContent = "Diterbitkan pada: " + new Date().toLocaleDateString("id-ID", {
+        day: "numeric", month: "long", year: "numeric"
+      });
+    }
+
+    function openDiscoveryBook() {
+      playSound("click");
+      const container = document.getElementById("bookEntriesContainer");
+      container.innerHTML = ZONES_META.map(zm => {
+        const unlocked = gameState.discoveredTheorems.includes(zm.id);
+        return `
+          <div style="padding:14px; border-radius:var(--radius-md); border:1px solid ${unlocked ? 'var(--emerald)' : 'var(--border-glass)'}; background:${unlocked ? 'rgba(16,185,129,0.12)' : 'rgba(255,255,255,0.03)'}; margin-bottom:12px;">
+            <div style="font-weight:700; color:${unlocked ? 'var(--gold)' : 'var(--text-muted)'}; margin-bottom:4px;">
+              ${zm.icon} ${zm.theoremTitle} (${zm.name})
+            </div>
+            <div style="font-size:0.95rem;">
+              ${unlocked ? zm.theoremLatex : '🔒 <em>Selesaikan tahap penemuan (Generalisasi) di zona ini untuk membuka halaman teorema!</em>'}
+            </div>
+          </div>
+        `;
+      }).join("");
+      document.getElementById("modalBook").classList.add("open");
+      renderMath(container);
+    }
+
+    function restoreEnergyModal() {
+      playSound("click");
+      document.getElementById("modalEnergy").classList.add("open");
+      renderMath(document.getElementById("modalEnergy"));
+    }
+
+    function refillEnergyNow() {
+      playSound("correct");
+      gameState.energy = 5;
+      saveLocalState();
+      closeModal("modalEnergy");
+      if (document.getElementById("screenZone").classList.contains("active") && activeZoneSession.stageIndex === 6) {
+        renderZoneQuestion();
+      }
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove("open");
+    }
+
+    // Dasbor Guru
+    function openTeacherModal() {
+      playSound("click");
+      document.getElementById("modalTeacher").classList.add("open");
+    }
+
+    function verifyTeacherPin() {
+      const pin = document.getElementById("inputTeacherPin").value.trim();
+      if (pin === "1234") {
+        document.getElementById("teacherLoginBox").style.display = "none";
+        document.getElementById("teacherDashboardContent").style.display = "block";
+        renderLocalTeacherStats();
+      } else {
+        document.getElementById("inputTeacherPin").value = "";
+        document.getElementById("inputTeacherPin").placeholder = "PIN belum tepat! Coba ketik: 1234";
+      }
+    }
+
+    function renderLocalTeacherStats() {
+      const body = document.getElementById("teacherStatsBody");
+      const tagCounts = {};
+      gameState.answerLogs.forEach(a => {
+        if (a.tagMiskonsepsi && a.tagMiskonsepsi !== "-") {
+          tagCounts[a.tagMiskonsepsi] = (tagCounts[a.tagMiskonsepsi] || 0) + 1;
+        }
+      });
+
+      const tagRows = Object.keys(tagCounts).length > 0
+        ? Object.entries(tagCounts).map(([t, c]) => `<li><strong>${t}</strong>: ${c} kali terdeteksi</li>`).join("")
+        : "<li>Belum ada miskonsepsi yang terdeteksi pada perangkat ini.</li>";
+
+      body.innerHTML = `
+        <div style="background:rgba(255,255,255,0.05); padding:14px; border-radius:var(--radius-md); margin-bottom:14px;">
+          <h4 style="color:var(--gold);">📌 Ringkasan Siswa Aktif di Perangkat Ini</h4>
+          <p><strong>Nama:</strong> ${gameState.nama || "-"} (${gameState.kelas || "-"}) | <strong>ID Sesi:</strong> ${gameState.sessionId}</p>
+          <p><strong>Zona Selesai:</strong> ${Object.values(gameState.zones).filter(z => z.completed).length} / 6</p>
+        </div>
+        <div style="background:rgba(255,255,255,0.05); padding:14px; border-radius:var(--radius-md);">
+          <h4 style="color:var(--cyan);">🔍 Analisis Tag Miskonsepsi Siswa</h4>
+          <ul style="margin-left:18px; margin-top:6px;">${tagRows}</ul>
+        </div>
+      `;
+    }
+
+    async function fetchTeacherCloudStats() {
+      const body = document.getElementById("teacherStatsBody");
+      if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL === "ISI_URL_WEB_APP") {
+        body.innerHTML = `<div style="background:rgba(251,191,36,0.15); border:1px solid var(--gold); padding:14px; border-radius:var(--radius-md); margin-bottom:14px;">ℹ️ <strong>Mode Lokal Aktif:</strong> Silakan isi konstanta <code>APPS_SCRIPT_URL</code> dengan URL Web App Google Apps Script Anda untuk menarik rekap satu kelas dari Spreadsheet.</div>`;
+        renderLocalTeacherStats();
+        return;
+      }
+      body.innerHTML = `<p>⏳ Sedang memuat data Rekap Kelas dari Google Spreadsheet...</p>`;
+      try {
+        const res = await fetch(APPS_SCRIPT_URL + "?action=teacherSummary");
+        const json = await res.json();
+        if (json && json.status === "ok") {
+          body.innerHTML = `
+            <div style="background:rgba(16,185,129,0.12); padding:14px; border-radius:var(--radius-md);">
+              <h4 style="color:var(--gold);">☁️ Data Rekap Kelas dari Spreadsheet</h4>
+              <p><strong>Total Siswa Terdaftar:</strong> ${json.totalStudents}</p>
+              <p><strong>Total Log Jawaban Tercatat:</strong> ${json.totalAnswers}</p>
+              <p style="margin-top:8px;"><strong>Frekuensi Miskonsepsi Kelas:</strong></p>
+              <pre style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; margin-top:4px; overflow-x:auto;">${JSON.stringify(json.misconceptions, null, 2)}</pre>
+            </div>
+          `;
+        }
+      } catch (e) {
+        body.innerHTML = `<p style="color:var(--coral);">Gagal memuat dari Cloud. Menampilkan data lokal perangkat.</p>`;
+        renderLocalTeacherStats();
+      }
+    }
+
+    // Inisialisasi Saat Halaman Dimuat
+    window.addEventListener("DOMContentLoaded", () => {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY_STATE);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.nama) {
+            document.getElementById("btnResumeSession").style.display = "inline-flex";
+          }
+        }
+      } catch (e) {}
+      processCloudQueue();
+    });
+  </script>
+</body>
+</html>
