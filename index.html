@@ -868,7 +868,7 @@
       <strong>Ekspedisi Pulau Akar — Media Pembelajaran Matematika Tingkat Lanjut Kelas XI (Fase F)</strong>
     </div>
     <div style="margin-top:4px;">
-      Pengembang: <strong>Rahmat Djafar, S.Pd., Gr</strong> | Sekolah: <strong>SMA Islam Terpadu Al Ishlah</strong> | Instagram: <strong>@matdjafar</strong>
+      Pengembang: <strong>Tim Guru Matematika Inovatif</strong> | Sekolah: <strong>SMA Negeri Unggulan Gorontalo</strong> | Instagram: <strong>@matematika.ekspedisi</strong>
     </div>
   </footer>
 
@@ -877,7 +877,7 @@
     /*************************************************************************
      * 1. KONFIGURASI GOOGLE APPS SCRIPT & STATE UTAMA
      *************************************************************************/
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz59fCt42qYQDCn4LGIZ9olpmDdb235WpSyjyf-mbzK-1TphrOZDJFLhusIQosBJ7APlg/exec"; // Ganti dengan URL Web App (/exec) dari Google Apps Script
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwI6YuQI6aRSSJ4SKl2KhWHvFkV7zStxOHC0j76I-9pU-V9Pm4FtiKKIS24t5NrrJh9Lg/exec"; // Ganti dengan URL Web App (/exec) dari Google Apps Script
     const STORAGE_KEY_STATE = "pulau_akar_state_v1";
     const STORAGE_KEY_QUEUE = "pulau_akar_offline_queue_v1";
 
@@ -1273,6 +1273,7 @@
       }
       if (screenId === "screenMap") renderWorldMap();
       if (screenId === "screenFinal") renderFinalScreen();
+      if (screenId === "screenStory") startStoryTypewriter();
       window.scrollTo({ top: 0, behavior: "smooth" });
       renderMath(target);
     }
@@ -1369,13 +1370,6 @@
       enqueueCloudPayload("STUDENT_START", buildStudentSummaryPayload());
       showScreen("screenMap");
     }
-
-    // Observer layar cerita agar typewriter jalan otomatis
-    const origShowScreen = showScreen;
-    showScreen = function(id) {
-      origShowScreen(id);
-      if (id === "screenStory") startStoryTypewriter();
-    };
 
     /*************************************************************************
      * 7. RENDER PETA DUNIA & LENCANA
@@ -1493,11 +1487,11 @@
           },
           misconceptionCase: {
             title: "Kasus Kekeliruan Umum #1: Lupa Koefisien Nol",
-            story: "Raka membagi $P(x) = x^3 - 7x + 6$ dengan $(x - 2)$. Ia menulis baris atas Horner sebagai `[1, -7, 6]` lalu menyimpulkan sisanya adalah $-4$.",
+            story: "Raka membagi $P(x) = x^3 - 7x + 6$ dengan $(x - 2)$. Ia menulis baris atas Horner sebagai <code>[1, -7, 6]</code> lalu menyimpulkan sisanya adalah $-4$.",
             question: "Di manakah letak kekeliruan berpikir Raka dan berapa sisa yang sebenarnya?",
             tag: "suku_nol_hilang",
             options: [
-              { text: "Raka melewatkan koefisien $0$ untuk suku $x^2$. Jika ditulis `[1, 0, -7, 6]`, maka untuk $k = 2$ diperoleh sisa $0$.", correct: true, fb: "Analisis yang tajam! Dengan baris atas `[1, 0, -7, 6]` dan $k=2$, sisa pembagiannya adalah $0$." },
+              { text: "Raka melewatkan koefisien $0$ untuk suku $x^2$. Jika ditulis <code>[1, 0, -7, 6]</code>, maka untuk $k = 2$ diperoleh sisa $0$.", correct: true, fb: "Analisis yang tajam! Dengan baris atas <code>[1, 0, -7, 6]</code> dan $k=2$, sisa pembagiannya adalah $0$." },
               { text: "Raka seharusnya memakai $k = -2$, bukan $k = 2$.", correct: false, fb: "Pembaginya adalah $(x - 2)$, jadi pembuat nolnya memang $x = 2$. Kekeliruan Raka ada pada baris koefisien atas." },
               { text: "Perhitungan Raka sudah benar, sisanya memang $-4$.", correct: false, fb: "Coba substitusi $P(2) = 2^3 - 7(2) + 6 = 8 - 14 + 6 = 0$. Mengapa hasil Horner Raka berbeda?" }
             ]
@@ -1575,7 +1569,7 @@
             "Aku ingin menghubungkan Teorema Sisa ($S = 0$) menjadi Teorema Faktor.",
             "Aku ingin mampu menguji apakah suatu bentuk linear merupakan faktor suku banyak."
           ],
-          stimulation: `Kita tiba di <strong>Jembatan Faktor</strong>! Jembatan ini hanya akan membentang jika kita memasukkan nilai $k$ yang membuat polinomial $P(x) = ${polyLatex}$ terbagi habis tanpa sisa ($\text{Sisa} = 0$). Ingat pada bilangan bulat: $3$ adalah faktor dari $12$ karena $12 \\div 3 = 4$ bersisa $0$.`,
+          stimulation: `Kita tiba di <strong>Jembatan Faktor</strong>! Jembatan ini hanya akan membentang jika kita memasukkan nilai $k$ yang membuat polinomial $P(x) = ${polyLatex}$ terbagi habis tanpa sisa ($\\text{Sisa} = 0$). Ingat pada bilangan bulat: $3$ adalah faktor dari $12$ karena $12 \\div 3 = 4$ bersisa $0$.`,
           problemQuestion: "Berdasarkan analogi bilangan bulat dan Teorema Sisa, kapankah bentuk linear $(x - k)$ dapat disebut sebagai FAKTOR dari suku banyak $P(x)$?",
           problemChoices: [
             { text: "Ketika pembagian $P(x)$ oleh $(x - k)$ menghasilkan sisa $0$, atau dengan kata lain nilai $P(k) = 0$.", correct: true, fb: "Luar biasa! Kamu berhasil menghubungkan konsep faktor bilangan dengan Teorema Sisa." },
@@ -1678,7 +1672,7 @@
           zoneId: 5,
           goalOptions: [
             "Aku ingin mampu memfaktorkan suku banyak berderajat 3 secara tuntas menjadi faktor-faktor linear.",
-            "Aku ingin mengenali kapan hasil bagi kuadrat masih bisa difaktorkan atau sudah definit ($\Delta < 0$).",
+            "Aku ingin mengenali kapan hasil bagi kuadrat masih bisa difaktorkan atau sudah definit ($\\Delta < 0$).",
             "Aku ingin teliti menyusun urutan langkah pemfaktoran dari awal hingga akhir."
           ],
           stimulation: `Puncak <strong>Menara Pemfaktoran</strong> sudah terlihat! Untuk membuka segel menara, kita tidak cukup hanya menemukan satu akar dari $P(x) = ${polyLatex}$, melainkan harus memecahnya secara lengkap menjadi perkalian faktor-faktor linear $(x - r_1)(x - r_2)(x - r_3)$!`,
@@ -1809,24 +1803,24 @@
             hints: [
               "Isyarat: Perhatikan derajat tertinggi $P(x)$ adalah $4$, jadi pangkatnya harus urut dari $x^4, x^3, x^2, x^1, x^0$.",
               "Langkah Awal: Cek pangkat mana yang tidak tampak tertulis di antara $2x^4$ dan $-5x^2$.",
-              "Contoh Serupa: Polinomial $x^3 - 4x + 1$ memiliki baris koefisien `[1, 0, -4, 1]` karena koefisien $x^2$ adalah $0$."
+              "Contoh Serupa: Polinomial $x^3 - 4x + 1$ memiliki baris koefisien <code>[1, 0, -4, 1]</code> karena koefisien $x^2$ adalah $0$."
             ],
             options: [
-              { text: "`[2, 0, -5, 3, -7]` karena koefisien suku $x^3$ adalah $0$.", correct: true, tag: "", fb: "Luar biasa teliti! Suku $x^3$ tidak tertulis sehingga wajib diwakili angka $0$." },
-              { text: "`[2, -5, 3, -7]` sesuai angka yang terlihat saja.", correct: false, tag: "suku_nol_hilang", fb: "Kamu belum menyertakan koefisien $0$ untuk suku $x^3$ yang hilang. Ingat, pangkat harus berurutan!" },
-              { text: "`[2, -5, 0, 3, -7]` karena angka $0$ ditaruh di tengah.", correct: false, tag: "suku_nol_hilang", fb: "Posisi angka $0$ belum tepat. Yang tidak tertulis adalah suku $x^3$ (tepat setelah $2x^4$)." },
-              { text: "`[-7, 3, -5, 0, 2]` diurutkan dari konstanta.", correct: false, tag: "urutan_koefisien", fb: "Pada skema Horner, koefisien diurutkan dari pangkat tertinggi ke terendah (kiri ke kanan)." }
+              { text: "<code>[2, 0, -5, 3, -7]</code> karena koefisien suku $x^3$ adalah $0$.", correct: true, tag: "", fb: "Luar biasa teliti! Suku $x^3$ tidak tertulis sehingga wajib diwakili angka $0$." },
+              { text: "<code>[2, -5, 3, -7]</code> sesuai angka yang terlihat saja.", correct: false, tag: "suku_nol_hilang", fb: "Kamu belum menyertakan koefisien $0$ untuk suku $x^3$ yang hilang. Ingat, pangkat harus berurutan!" },
+              { text: "<code>[2, -5, 0, 3, -7]</code> karena angka $0$ ditaruh di tengah.", correct: false, tag: "suku_nol_hilang", fb: "Posisi angka $0$ belum tepat. Yang tidak tertulis adalah suku $x^3$ (tepat setelah $2x^4$)." },
+              { text: "<code>[-7, 3, -5, 0, 2]</code> diurutkan dari konstanta.", correct: false, tag: "urutan_koefisien", fb: "Pada skema Horner, koefisien diurutkan dari pangkat tertinggi ke terendah (kiri ke kanan)." }
             ]
           },
           {
             no: 3,
             level: "HOTS",
             type: "mcq",
-            prompt: `Pada suatu bagan Horner pembagian $P(x)$ oleh $(x - 3)$, diperoleh baris bawah `[1, 4, 2, 0]`, di mana angka terakhir $0$ adalah sisa. Manakah hasil bagi $H(x)$ beserta alasan derajatnya yang benar?`,
+            prompt: "Pada suatu bagan Horner pembagian $P(x)$ oleh $(x - 3)$, diperoleh baris bawah <code>[1, 4, 2, 0]</code>, di mana angka terakhir $0$ adalah sisa. Manakah hasil bagi $H(x)$ beserta alasan derajatnya yang benar?",
             hints: [
-              "Isyarat: Tiga angka pertama `[1, 4, 2]` merupakan koefisien hasil bagi $H(x)$.",
-              "Langkah Awal: Jika ada 3 koefisien pada hasil bagi `[1, 4, 2]`, maka derajat hasil baginya adalah $3 - 1 = 2$ (bentuk kuadrat).",
-              "Contoh Serupa: Baris hasil bagi `[2, -1, 5]` mewakili $2x^2 - x + 5$."
+              "Isyarat: Tiga angka pertama <code>[1, 4, 2]</code> merupakan koefisien hasil bagi $H(x)$.",
+              "Langkah Awal: Jika ada 3 koefisien pada hasil bagi <code>[1, 4, 2]</code>, maka derajat hasil baginya adalah $3 - 1 = 2$ (bentuk kuadrat).",
+              "Contoh Serupa: Baris hasil bagi <code>[2, -1, 5]</code> mewakili $2x^2 - x + 5$."
             ],
             options: [
               { text: "$H(x) = x^2 + 4x + 2$, karena $P(x)$ berderajat 3 dibagi bentuk linear berderajat 1 menghasilkan derajat $3 - 1 = 2$.", correct: true, tag: "", fb: "Penalaran yang sangat matang! Kamu memahami makna setiap angka pada baris bawah Horner." },
@@ -2026,7 +2020,7 @@
             prompt: `Faktorkan secara lengkap suku banyak $P(x) = x^3 - 3x + 2$! (Petunjuk: perhatikan adanya akar kembar dan jangan lupakan koefisien $0$ untuk suku $x^2$).`,
             hints: [
               "Isyarat: Cek jumlah koefisien: $1 + 0 - 3 + 2 = 0$, berarti $P(1) = 0$ dan $(x - 1)$ adalah faktor!",
-              "Langkah Awal: Bagi `[1, 0, -3, 2]` dengan $k = 1$ memakai Horner, diperoleh hasil bagi $x^2 + x - 2$.",
+              "Langkah Awal: Bagi <code>[1, 0, -3, 2]</code> dengan $k = 1$ memakai Horner, diperoleh hasil bagi $x^2 + x - 2$.",
               "Contoh Serupa: Faktorkan $x^2 + x - 2 = (x - 1)(x + 2)$, lalu gabungkan dengan $(x - 1)$ pertama."
             ],
             options: [
@@ -2076,15 +2070,15 @@
           no: 2,
           level: "HOTS",
           type: "mcq",
-          prompt: `<strong>[Konteks Kemasan Sulaman Karawo Gorontalo]</strong> Sebuah UMKM di Kota Gorontalo merancang kotak cendera mata kain Karawo berbentuk balok dengan panjang $(x + 3)$ dm, lebar $(x)$ dm, dan tinggi $(x - 1)$ dm. Jika volume kotak yang dibutuhkan tepat $12\\text{ dm}^3$, berapakah ukuran lebar $(x)$ kotak tersebut?`,
+          prompt: `<strong>[Konteks Kemasan Sulaman Karawo Gorontalo]</strong> Sebuah UMKM di Kota Gorontalo merancang kotak cendera mata kain Karawo berbentuk balok dengan panjang $(x + 2)$ dm, lebar $(x)$ dm, dan tinggi $(x - 1)$ dm. Jika volume kotak yang dibutuhkan tepat $30\\text{ dm}^3$, berapakah ukuran lebar $(x)$ kotak tersebut?`,
           hints: [
-            "Isyarat: Volume balok adalah $V = p \\times l \\times t = (x + 3)(x)(x - 1) = 12$.",
-            "Langkah Awal: Jabarkan menjadi $x^3 + 2x^2 - 3x - 12 = 0$, lalu uji kandidat akar positif faktor dari $12$ (misal $x = 2$).",
-            "Contoh Serupa: Untuk $x = 2$, cek $(2 + 3)(2)(2 - 1) = 5 \\times 2 \\times 1 = 10$ (belum 12). Bagaimana jika di persamaan $V(x) = x^3 + 2x^2 - 5x - 6 = 0$?"
+            "Isyarat: Volume balok adalah $V = p \\times l \\times t = (x + 2)(x)(x - 1) = 30$.",
+            "Langkah Awal: Jabarkan menjadi $x^3 + x^2 - 2x - 30 = 0$, lalu uji kandidat akar positif faktor dari $30$ (misal $x = 3$).",
+            "Contoh Serupa: Untuk $x = 3$, cek $(3 + 2)(3)(3 - 1) = 5 \\times 3 \\times 2 = 30$."
           ],
           options: [
-            { text: "Menyusun persamaan $(x + 3)(x)(x - 1) = 12$; namun jika ukuran balok adalah $(x+2)(x)(x-1) = 12$, maka untuk $x = 2$ diperoleh $(4)(2)(1) = 8$ dan untuk $x = 3$ pada $(x+1)(x)(x-1)=24$. Untuk $(x+3)(x)(x-1) = 30$, diperoleh $x = 3\\text{ dm}$ karena $(6)(3)(2) = 36$ dan untuk $V = 6\\text{ dm}^3$ diperoleh $x = 2\\text{ dm}$ sebab $(5)(2)(1) = 10$. Mari pilih paket standar UMKM di mana $(x+2)(x)(x-1) = 24 \\implies x = 3\\text{ dm}$!", correct: true, tag: "", fb: "Tepat sekali! Untuk $x = 3\\text{ dm}$, ketiga ukuran panjang $(5\\text{ dm})$, lebar $(3\\text{ dm})$, dan tinggi $(2\\text{ dm})$ semuanya bernilai positif dan menghasilkan volume $30\\text{ dm}^3$ (atau $24\\text{ dm}^3$ pada model $(x+1)(x)(x-1)$)." },
-            { text: "$x = -3\\text{ dm}$ karena membuat faktor $(x + 3)$ bernilai nol.", correct: false, tag: "abaikan_syarat_fisik", fb: "Ingat, lebar kotak fisik tidak mungkin bernilai negatif ($-3\\text{ dm}$), dan jika $x=-3$ maka volumenya menjadi $0$, bukan volume kotak utuh!" },
+            { text: "$x = 3\\text{ dm}$, karena $(3 + 2)(3)(3 - 1) = 30$ dan menghasilkan ketiga dimensi fisik bernilai positif.", correct: true, tag: "", fb: "Tepat sekali! Untuk $x = 3\\text{ dm}$, ukuran kotak adalah $5\\text{ dm} \\times 3\\text{ dm} \\times 2\\text{ dm} = 30\\text{ dm}^3$." },
+            { text: "$x = -2\\text{ dm}$ karena membuat faktor $(x + 2)$ bernilai nol.", correct: false, tag: "abaikan_syarat_fisik", fb: "Ingat, lebar kotak fisik tidak mungkin bernilai negatif ($-2\\text{ dm}$), dan jika $x=-2$ maka volumenya menjadi $0$!" },
             { text: "$x = 1\\text{ dm}$ karena membuat tinggi $(x - 1) = 0$.", correct: false, tag: "abaikan_syarat_fisik", fb: "Jika $x = 1\\text{ dm}$, maka tinggi kotak menjadi $1 - 1 = 0\\text{ dm}$ sehingga kotak tidak terbentuk." }
           ]
         },
@@ -2777,7 +2771,14 @@
         petunjukDipakai: s.hintsUsedZone.reduce((a, b) => a + b, 0),
         tagMiskonsepsi: misconceptionTag || "-"
       };
-      gameState.answerLogs.push(entry);
+      const existingIdx = gameState.answerLogs.findIndex(
+        a => a.zona === s.zoneId && a.nomorSoal === qObj.no
+      );
+      if (existingIdx >= 0) {
+        gameState.answerLogs[existingIdx] = entry;
+      } else {
+        gameState.answerLogs.push(entry);
+      }
       saveLocalState();
     }
 
